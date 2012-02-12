@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T2_PlaySound", "SoundPlayground\SoundPlayground.vcxproj", "{C619D924-D385-4767-A111-C4FAEBA0DD8F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T3_MovableCar", "T3_MovableCar\T3_MovableCar.vcxproj", "{B94B9FC5-6A28-4E67-96F8-08B002D30633}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C619D924-D385-4767-A111-C4FAEBA0DD8F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C619D924-D385-4767-A111-C4FAEBA0DD8F}.Debug|Win32.Build.0 = Debug|Win32
+		{C619D924-D385-4767-A111-C4FAEBA0DD8F}.Release|Win32.ActiveCfg = Release|Win32
+		{C619D924-D385-4767-A111-C4FAEBA0DD8F}.Release|Win32.Build.0 = Release|Win32
+		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Debug|Win32.Build.0 = Debug|Win32
+		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Release|Win32.ActiveCfg = Release|Win32
+		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+# File types to ignore #
+########################
+
+*.sdf
+*.opensdf
+*.o
+*.ignoreCheck
+Debug/
+Release/
+
+# OS generated files #
+######################
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db

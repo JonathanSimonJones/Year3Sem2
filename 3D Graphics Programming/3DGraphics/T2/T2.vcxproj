@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ECFAD78D-CD2E-472F-8DCD-AC49E184BA5F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>T2</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\3DGraphics\DirectXDependentcies.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\3DGraphics\DirectXDependentcies.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\T2\Camera.cpp" />
+    <ClCompile Include="..\..\T2\d3dApp.cpp" />
+    <ClCompile Include="..\..\T2\d3dUtil.cpp" />
+    <ClCompile Include="..\..\T2\DrawableTex2D.cpp" />
+    <ClCompile Include="..\..\T2\Effects.cpp" />
+    <ClCompile Include="..\..\T2\GameTimer.cpp" />
+    <ClCompile Include="..\..\T2\InputLayouts.cpp" />
+    <ClCompile Include="..\..\T2\Mesh.cpp" />
+    <ClCompile Include="..\..\T2\Particle System Demo.cpp" />
+    <ClCompile Include="..\..\T2\PSystem.cpp" />
+    <ClCompile Include="..\..\T2\Sky.cpp" />
+    <ClCompile Include="..\..\T2\Terrain.cpp" />
+    <ClCompile Include="..\..\T2\TextureMgr.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\T2\Camera.h" />
+    <ClInclude Include="..\..\T2\d3dApp.h" />
+    <ClInclude Include="..\..\T2\d3dUtil.h" />
+    <ClInclude Include="..\..\T2\DrawableTex2D.h" />
+    <ClInclude Include="..\..\T2\Effects.h" />
+    <ClInclude Include="..\..\T2\GameTimer.h" />
+    <ClInclude Include="..\..\T2\InputLayouts.h" />
+    <ClInclude Include="..\..\T2\Light.h" />
+    <ClInclude Include="..\..\T2\Mesh.h" />
+    <ClInclude Include="..\..\T2\PSystem.h" />
+    <ClInclude Include="..\..\T2\Sky.h" />
+    <ClInclude Include="..\..\T2\Terrain.h" />
+    <ClInclude Include="..\..\T2\TextureMgr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\T2\buildshadowmap.fx" />
+    <None Include="..\..\T2\fire.fx" />
+    <None Include="..\..\T2\lighthelper.fx" />
+    <None Include="..\..\T2\mesh.fx" />
+    <None Include="..\..\T2\rain.fx" />
+    <None Include="..\..\T2\sky.fx" />
+    <None Include="..\..\T2\terrain.fx" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
