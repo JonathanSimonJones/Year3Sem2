@@ -9,7 +9,9 @@ namespace
 	struct ParticleVertex
 	{
 		D3DXVECTOR3 initialPos;
+		D3DXVECTOR3 currentPos;
 		D3DXVECTOR3 initialVel;
+		D3DXVECTOR3 currentVel;
 		D3DXVECTOR2 size;
 		float age;
 		unsigned int type;
@@ -27,6 +29,9 @@ PSystem::PSystem()
 	mEyePosW  = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
 	mEmitPosW = D3DXVECTOR4(0.0f, 0.0f, 0.0f, 1.0f);
 	mEmitDirW = D3DXVECTOR4(0.0f, 1.0f, 0.0f, 0.0f);
+
+	
+	mRainAcceleration = D3DXVECTOR3(-1.0f, -9.8f, 0.0f);
 }
 
 PSystem::~PSystem()
@@ -78,6 +83,8 @@ void PSystem::init(ID3D10Device* device, ID3D10Effect* FX, ID3D10ShaderResourceV
 	mfxTexArrayVar  = FX->GetVariableByName("gTexArray")->AsShaderResource();
 	mfxRandomTexVar = FX->GetVariableByName("gRandomTex")->AsShaderResource();
 
+	mfxWindVar		= FX->GetVariableByName("gWindAcceleration")->AsVector();
+
 	buildVB();
 }
 
@@ -93,6 +100,16 @@ void PSystem::update(float dt, float gameTime)
 	mTimeStep = dt;
 
 	mAge += dt;
+
+	if(GetAsyncKeyState(VK_RIGHT) & 0x8000)	
+	{
+		mRainAcceleration.x ++;
+	}
+
+	if(GetAsyncKeyState(VK_LEFT) & 0x8000)	
+	{
+		mRainAcceleration.x --;
+	}
 }
 
 void PSystem::draw()
@@ -111,6 +128,7 @@ void PSystem::draw()
 	mfxEmitDirVar->SetFloatVector((float*)&mEmitDirW);
 	mfxTexArrayVar->SetResource(mTexArrayRV);
 	mfxRandomTexVar->SetResource(mRandomTexRV);
+	mfxWindVar->SetFloatVector((float*)&mRainAcceleration);
 	//
 	// Set IA stage.
 	//

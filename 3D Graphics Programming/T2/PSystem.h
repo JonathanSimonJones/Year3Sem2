@@ -63,6 +63,10 @@ private:
 	ID3D10EffectVectorVariable* mfxEmitDirVar;
 	ID3D10EffectShaderResourceVariable* mfxTexArrayVar;
 	ID3D10EffectShaderResourceVariable* mfxRandomTexVar;
+
+	ID3D10EffectVectorVariable* mfxWindVar;
+
+	D3DXVECTOR3 mRainAcceleration;
 };
 
 #endif // PARTICLESYS_H

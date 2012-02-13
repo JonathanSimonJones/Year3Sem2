@@ -177,7 +177,7 @@ void ParticleApp::drawScene()
 	md3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	mLand.draw(mLandWorld);
 
-	//mSky.draw();
+	mSky.draw();
 
 	// Draw particle systems last so it is blended with scene.
 	//mFire.setEyePos(GetCamera().position());

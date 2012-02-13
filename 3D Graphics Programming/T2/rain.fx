@@ -20,6 +20,9 @@ cbuffer cbPerFrame
 	float gGameTime;
 	float gTimeStep;
 	float4x4 gViewProj; 
+
+	float3 gWindAcceleration;
+
 };
 
 cbuffer cbFixed
@@ -73,7 +76,7 @@ float3 RandUnitVec3(float offset)
 	float u = (gGameTime + offset);
 	
 	// coordinates in [-1,1]
-	float3 v = gRandomTex.SampleLevel(gTriLinearSam, u, 0);
+	float4 v = gRandomTex.SampleLevel(gTriLinearSam, u, 0);
 	
 	// project onto unit sphere
 	return normalize(v);
@@ -85,7 +88,7 @@ float3 RandVec3(float offset)
 	float u = (gGameTime + offset);
 	
 	// coordinates in [-1,1]
-	float3 v = gRandomTex.SampleLevel(gTriLinearSam, u, 0);
+	float4 v = gRandomTex.SampleLevel(gTriLinearSam, u, 0);
 	
 	return v;
 }
@@ -100,7 +103,9 @@ float3 RandVec3(float offset)
 struct Particle
 {
 	float3 initialPosW : POSITION;
+	float3 currentPosW : CURRENTPOSITION;
 	float3 initialVelW : VELOCITY;
+	float3 currentVelW : CURRENTVELOCITY;
 	float2 sizeW       : SIZE;
 	float age          : AGE;
 	uint type          : TYPE;
@@ -135,7 +140,9 @@ void StreamOutGS(point Particle gIn[1],
 			
 				Particle p;
 				p.initialPosW = gEmitPosW.xyz + vRandom;
+				p.currentPosW = p.initialPosW;
 				p.initialVelW = float3(0.0f, 0.0f, 0.0f);
+				p.currentVelW = p.initialVelW;
 				p.sizeW       = float2(1.0f, 1.0f);
 				p.age         = 0.0f;
 				p.type        = PT_FLARE;
@@ -152,15 +159,22 @@ void StreamOutGS(point Particle gIn[1],
 	}
 	else
 	{
+		gIn[0].currentVelW += gTimeStep*gWindAcceleration;
+
+		// constant acceleration equation
+		gIn[0].currentPosW += gTimeStep*gIn[0].currentVelW;
+		
 		// Specify conditions to keep particle; this may vary from system to system.
 		if( gIn[0].age <= 4.0f )
+		{
 			ptStream.Append(gIn[0]);
+		}
 	}		
 }
 
 GeometryShader gsStreamOut = ConstructGSWithSO( 
 	CompileShader( gs_4_0, StreamOutGS() ), 
-	"POSITION.xyz; VELOCITY.xyz; SIZE.xy; AGE.x; TYPE.x" );
+	"POSITION.xyz; CURRENTPOSITION.xyz; VELOCITY.xyz; CURRENTVELOCITY.xyz; SIZE.xy; AGE.x; TYPE.x" );
 	
 technique10 StreamOutTech
 {
@@ -191,11 +205,13 @@ VS_OUT DrawVS(Particle vIn)
 {
 	VS_OUT vOut;
 	
-	float t = vIn.age;
+	//float t = vIn.age;
 	
 	// constant acceleration equation
-	vOut.posW = 0.5f*t*t*gAccelW + t*vIn.initialVelW + vIn.initialPosW;
-	
+	//vOut.posW = 0.5f*t*t*gAccelW + t*vIn.initialVelW + vIn.initialPosW;
+
+	vOut.posW = vIn.currentPosW;
+
 	vOut.type  = vIn.type;
 	
 	return vOut;
@@ -217,7 +233,7 @@ void DrawGS(point VS_OUT gIn[1],
 	{
 		// Slant line in acceleration direction.
 		float3 p0 = gIn[0].posW;
-		float3 p1 = gIn[0].posW + 0.07f*gAccelW;
+		float3 p1 = gIn[0].posW + 0.07f*gWindAcceleration;
 		
 		GS_OUT v0;
 		v0.posH = mul(float4(p0, 1.0f), gViewProj);

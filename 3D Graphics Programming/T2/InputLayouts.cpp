@@ -57,15 +57,19 @@ void InputLayout::InitAll(ID3D10Device* device)
 	//
 	D3D10_INPUT_ELEMENT_DESC particleDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D10_INPUT_PER_VERTEX_DATA, 0},
-		{"VELOCITY", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0},
-		{"SIZE",     0, DXGI_FORMAT_R32G32_FLOAT,    0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0},
-		{"AGE",      0, DXGI_FORMAT_R32_FLOAT,       0, 32, D3D10_INPUT_PER_VERTEX_DATA, 0},
-		{"TYPE",     0, DXGI_FORMAT_R32_UINT,        0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		
+		{"POSITION",		 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"CURRENTPOSITION",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"VELOCITY",		 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"CURRENTVELOCITY",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"SIZE",			 0, DXGI_FORMAT_R32G32_FLOAT,    0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"AGE",				 0, DXGI_FORMAT_R32_FLOAT,       0, 56, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"TYPE",			 0, DXGI_FORMAT_R32_UINT,        0, 60, D3D10_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	fx::FireFX->GetTechniqueByName("StreamOutTech")->GetPassByIndex(0)->GetDesc(&PassDesc);
-    HR(device->CreateInputLayout(particleDesc, 5, PassDesc.pIAInputSignature,
+
+	fx::RainFX->GetTechniqueByName("StreamOutTech")->GetPassByIndex(0)->GetDesc(&PassDesc);
+    HR(device->CreateInputLayout(particleDesc, 7, PassDesc.pIAInputSignature,
 		PassDesc.IAInputSignatureSize, &Particle));
 }
 
