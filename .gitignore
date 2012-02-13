@@ -5,6 +5,7 @@
 *.opensdf
 *.o
 *.ignoreCheck
+*.suo
 Debug/
 Release/
 
