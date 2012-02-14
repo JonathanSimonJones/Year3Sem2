@@ -2,6 +2,8 @@
 
 #include "Terrain.hpp"
 #include "Line.hpp"
+#include <cstdlib>		// rand(), srand()
+#include <time.h>		// time()
 
 Terrain::Terrain():
 mNumVertices(3),
@@ -61,16 +63,24 @@ void Terrain::Initialise(ID3D10Device* Direct3DDevice, int n)
 
 void Terrain::Generate(ID3D10Device* Direct3DDevice)
 {
-	Line TempLine(2.0f, 2.0f);
-
-	for( int i = 0; i < vertices.size(); i++)
+	srand ( time(NULL) );
+	
+	for(int i = 0; i < 5; i++)
 	{
-		if( (TempLine.ReturnZ(vertices[i].pos.x)) > (vertices[i].pos.z) )
+		float gradient = rand() % 20;
+		float yIntercept = rand() % 19;
+		
+		Line TempLine(gradient, yIntercept);
+
+		for( int i = 0; i < vertices.size(); i++)
 		{
-			vertices[i].pos.y += 1.0f;
+			if( (TempLine.ReturnZ(vertices[i].pos.x)) > (vertices[i].pos.z) )
+			{
+				vertices[i].pos.y += 0.2f;
+			}
 		}
 	}
-
+	/*
 	Line TempLine2(-2.0f, 25.0f);
 
 	for( int i = 0; i < vertices.size(); i++)
@@ -80,7 +90,7 @@ void Terrain::Generate(ID3D10Device* Direct3DDevice)
 			vertices[i].pos.y += 1.0f;
 		}
 	}
-
+	*/
 	D3D10_BUFFER_DESC vbd;
     vbd.Usage = D3D10_USAGE_IMMUTABLE;
     vbd.ByteWidth = sizeof(vertices[0]) * mNumVertices;

@@ -87,7 +87,7 @@ void ColoredTriangleApp::initApp()
 	buildVertexLayouts();
 
 	Terrain1.Initialise(md3dDevice, 250);
-	//Terrain1.Generate(md3dDevice);
+	Terrain1.Generate(md3dDevice);
 }
 
 void ColoredTriangleApp::onResize()

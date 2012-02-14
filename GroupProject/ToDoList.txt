@@ -1,0 +1,12 @@
+Questions:
+
+
+-----------------------------------------------------------------------------------------------
+
+Stuff to fix:
+
+Moving of alien is a real hack atm
+Add different collision response to building piece as set position isnt descriptive enough
+Change code so that when one piece is selected then another piece cannot and set its z to higher than everything else
+Robot width and height currently hard coded, probably means aliens is aswell
+The spawning of the robot when all the parts are put together is really hacked, put silhouette bool in buildpiece, make a build piece set class
