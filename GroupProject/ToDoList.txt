@@ -1,6 +1,6 @@
 Questions:
 
-
+Are we going to have a camera class? How else are we going to keep alien in the center of the screen? Will it work with the parralex scrolling?
 -----------------------------------------------------------------------------------------------
 
 Stuff to fix:
