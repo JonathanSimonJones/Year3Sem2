@@ -1,6 +1,10 @@
 Questions:
 
-Are we going to have a camera class? How else are we going to keep alien in the center of the screen? Will it work with the parralex scrolling?
+switching levels, are we going to have a container with a pointer to all the different levels, which then means 
+that all the levels constantly exist. Or are we going to have a level initialise and then deinitilise after the player has left.
+Problem being that some things need to be consistent ie fork level and ship level
+
+Saving feature
 -----------------------------------------------------------------------------------------------
 
 Stuff to fix:

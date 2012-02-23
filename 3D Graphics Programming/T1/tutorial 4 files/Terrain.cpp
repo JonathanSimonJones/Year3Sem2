@@ -65,7 +65,7 @@ void Terrain::Generate(ID3D10Device* Direct3DDevice)
 {
 	srand ( time(NULL) );
 	
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 5000; i++)
 	{
 		float gradient = rand() % 20;
 		float yIntercept = rand() % 19;

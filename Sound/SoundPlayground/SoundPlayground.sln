@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T2_PlaySound", "SoundPlaygr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T3_MovableCar", "T3_MovableCar\T3_MovableCar.vcxproj", "{B94B9FC5-6A28-4E67-96F8-08B002D30633}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T4_Movable3DCar", "T4_Movable3DCar\T4_Movable3DCar.vcxproj", "{B0D7F977-6557-418B-B7F9-B91C35CB587D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Debug|Win32.Build.0 = Debug|Win32
 		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Release|Win32.ActiveCfg = Release|Win32
 		{B94B9FC5-6A28-4E67-96F8-08B002D30633}.Release|Win32.Build.0 = Release|Win32
+		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Debug|Win32.Build.0 = Debug|Win32
+		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Release|Win32.ActiveCfg = Release|Win32
+		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
