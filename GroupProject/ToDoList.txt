@@ -4,16 +4,27 @@ switching levels, are we going to have a container with a pointer to all the dif
 that all the levels constantly exist. Or are we going to have a level initialise and then deinitilise after the player has left.
 Problem being that some things need to be consistent ie fork level and ship level
 
+Shadows on the robot is wrong when he is flipped, shadows are on the same side 
+
 Saving feature
+
 -----------------------------------------------------------------------------------------------
 
 Stuff to fix:
 
+Fix how objects sizes are calculated and how they are placed on the screen 
+Change code so that when one piece its z to higher than everything else
+The spawning of the robot when all the parts are put together is really hacked, put silhouette bool in buildpiece, make a build piece set class
+Create puzzel class and have each puzzel fit into a different puzzel object
+Put alien and player movement into level class as it consistent between each level
+Check comments in build piece to see if they are still correct
+Add functionality so that when a building piece is placed on the silhouette it cannot be moved
+Create a class that encapsulates the building piece and its silhouette
+buildPieceBeingMoved_ in ship level feels quite dangerous, consider changing it.
+
+Completed:
+Fix how robot follows alien
 Moving of alien is a real hack atm
 Add different collision response to building piece as set position isnt descriptive enough
-Change code so that when one piece is selected then another piece cannot and set its z to higher than everything else
 Robot width and height currently hard coded, probably means aliens is aswell
-The spawning of the robot when all the parts are put together is really hacked, put silhouette bool in buildpiece, make a build piece set class
 Make sure the player can hold onto a build piece while they are pressing it
-Create puzzel class and have a each puzzel fit into a different puzzel
-Put alien and player movement into level class as it consistent between each level
