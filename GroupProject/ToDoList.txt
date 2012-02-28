@@ -8,6 +8,8 @@ Shadows on the robot is wrong when he is flipped, shadows are on the same side
 
 Saving feature
 
+In build piece, change function (position centre at) to set position?
+
 -----------------------------------------------------------------------------------------------
 
 Stuff to fix:
