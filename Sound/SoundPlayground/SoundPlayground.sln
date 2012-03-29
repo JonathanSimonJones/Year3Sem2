@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T3_MovableCar", "T3_Movable
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T4_Movable3DCar", "T4_Movable3DCar\T4_Movable3DCar.vcxproj", "{B0D7F977-6557-418B-B7F9-B91C35CB587D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "T5_TurningHead", "T5_TurningHead\T5_TurningHead.vcxproj", "{8FC094AE-86AF-4051-85D3-6B5CC52FC50A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -25,6 +27,10 @@ Global
 		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Debug|Win32.Build.0 = Debug|Win32
 		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Release|Win32.ActiveCfg = Release|Win32
 		{B0D7F977-6557-418B-B7F9-B91C35CB587D}.Release|Win32.Build.0 = Release|Win32
+		{8FC094AE-86AF-4051-85D3-6B5CC52FC50A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8FC094AE-86AF-4051-85D3-6B5CC52FC50A}.Debug|Win32.Build.0 = Debug|Win32
+		{8FC094AE-86AF-4051-85D3-6B5CC52FC50A}.Release|Win32.ActiveCfg = Release|Win32
+		{8FC094AE-86AF-4051-85D3-6B5CC52FC50A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

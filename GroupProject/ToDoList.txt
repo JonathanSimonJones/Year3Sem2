@@ -23,6 +23,9 @@ Check comments in build piece to see if they are still correct
 Add functionality so that when a building piece is placed on the silhouette it cannot be moved
 Create a class that encapsulates the building piece and its silhouette
 buildPieceBeingMoved_ in ship level feels quite dangerous, consider changing it.
+See if there is a touch release method.
+Removing code relating to alien being fixed in the center of the screen.
+Change getVelocitySet to isVelocitySet.
 
 Completed:
 Fix how robot follows alien
