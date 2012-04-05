@@ -8,6 +8,8 @@ Shadows on the robot is wrong when he is flipped, shadows are on the same side
 
 Saving feature
 
+In build piece, change function (position centre at) to set position?
+
 -----------------------------------------------------------------------------------------------
 
 Stuff to fix:
@@ -21,7 +23,13 @@ Check comments in build piece to see if they are still correct
 Add functionality so that when a building piece is placed on the silhouette it cannot be moved
 Create a class that encapsulates the building piece and its silhouette
 buildPieceBeingMoved_ in ship level feels quite dangerous, consider changing it.
+<<<<<<< HEAD
 Fix how walking is set in alien and robot, its done in the wrong place currently
+=======
+See if there is a touch release method.
+Removing code relating to alien being fixed in the center of the screen.
+Change getVelocitySet to isVelocitySet.
+>>>>>>> b044617567c4a75ffa3453fdc1ee22faa949735c
 
 Completed:
 Fix how robot follows alien
