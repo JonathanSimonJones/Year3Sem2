@@ -21,6 +21,7 @@ Check comments in build piece to see if they are still correct
 Add functionality so that when a building piece is placed on the silhouette it cannot be moved
 Create a class that encapsulates the building piece and its silhouette
 buildPieceBeingMoved_ in ship level feels quite dangerous, consider changing it.
+Fix how walking is set in alien and robot, its done in the wrong place currently
 
 Completed:
 Fix how robot follows alien
