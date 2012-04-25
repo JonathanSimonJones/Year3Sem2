@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="EffectFiles">
+      <UniqueIdentifier>{8ed0f61c-dcc2-4f9b-a227-c35367e1aebe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeaderFiles\Box.h">
@@ -48,9 +51,6 @@
     <ClInclude Include="HeaderFiles\Multisample.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HeaderFiles\Roof.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderFiles\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +70,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HeaderFiles\WindowsClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Line.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Terrain.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,9 +113,6 @@
     <ClCompile Include="SourceFiles\MultiSample.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SourceFiles\Roof.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SourceFiles\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -128,5 +131,28 @@
     <ClCompile Include="SourceFiles\WindowsClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\Line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EffectFiles\color.fx">
+      <Filter>EffectFiles</Filter>
+    </None>
+    <None Include="EffectFiles\cubemap.fx">
+      <Filter>EffectFiles</Filter>
+    </None>
+    <None Include="EffectFiles\lighthelper.fx">
+      <Filter>EffectFiles</Filter>
+    </None>
+    <None Include="EffectFiles\sky.fx">
+      <Filter>EffectFiles</Filter>
+    </None>
+    <None Include="EffectFiles\tex.fx">
+      <Filter>EffectFiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

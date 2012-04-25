@@ -20,8 +20,6 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 , m_FxTexMatVar(0)
 , m_FxBoxWorldVar(0)
 , m_EnvironmentMapRV(0)
-, m_Roof(m_Direct3DDevice)
-, m_Floor(m_Direct3DDevice)
 {
 	// Initialise world view projection matrix
 	D3DXMatrixIdentity(&m_WorldViewProjection);
@@ -58,22 +56,6 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 											   &m_SpecMapRV,		// The pointer that is used to interface with the new resource
 											   0) );				// Used with pPump
 
-	// Create crate resource view
-	HR( D3DX10CreateShaderResourceViewFromFile(m_Direct3DDevice,	// The device to create the texture with
-											   L"Images\\Tiles.jpg",		// The name of the file
-											   0,					// Optional image info, specify null to use source dimensions and to creat a full chain of mipmap levels
-											   0,					// Used to spawn a new thread to load resources, pPump
-											   &m_RoofTilesRV,		// The pointer that is used to interface with the new resource
-											   0) );				// Used with pPump
-
-	// Create crate resource view
-	HR( D3DX10CreateShaderResourceViewFromFile(m_Direct3DDevice,	// The device to create the texture with
-											   L"Images\\Grass.jpg",		// The name of the file
-											   0,					// Optional image info, specify null to use source dimensions and to creat a full chain of mipmap levels
-											   0,					// Used to spawn a new thread to load resources, pPump
-											   &m_GrassRV,			// The pointer that is used to interface with the new resource
-											   0) );				// Used with pPump
-
 	// Set the sky texture up
 	m_EnvironmentMapRV	= GetTextureMgr().createCubeTex(L"Images\\grassenvmap1024.dds");
 
@@ -85,11 +67,12 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 
 	// Set box position
 	m_Box.SetPosition(0.0f, 1.0f, 0.0f);
-
-	m_Floor.ScaleXZ(10, 10);
 	
 	// Initialise sky
 	m_Sky.init(m_Direct3DDevice, m_EnvironmentMapRV, 5000.0f);
+
+	m_Terrain.Initialise(m_Direct3DDevice, 30);
+	m_Terrain.Generate(m_Direct3DDevice);
 }
 
 Scene::~Scene()
@@ -106,8 +89,6 @@ Scene::~Scene()
 	ReleaseCOM(m_VertexLayout);
 	ReleaseCOM(m_DiffuseMapRV);
 	ReleaseCOM(m_SpecMapRV);
-	ReleaseCOM(m_RoofTilesRV);
-	ReleaseCOM(m_GrassRV);
 	fx::DestroyAll();
 	InputLayout::DestroyAll();
 }
@@ -242,24 +223,12 @@ void Scene::DrawScene()
 		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );		// Updates WVP matrix in the internal cache of the effect object
 		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );
 		pass->Apply(0);
-		m_Box.Draw(m_Direct3DDevice);
+		//m_Box.Draw(m_Direct3DDevice);
 
-		m_fxDiffuseMapVar->SetResource(m_RoofTilesRV);						// Load tile texture
-		m_WorldViewProjection = m_Box.ReturnWorldMatrix()*view*proj;		// Using the boxes world on pupose as we want the roof to move at the same time as the box
-		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );			// Updates WVP matrix in the internal cache of the effect object 
-		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );	// Using the boxes world on pupose as we want the roof to move at the same time as the box
-		pass->Apply(0);
-		m_Roof.Draw(m_Direct3DDevice);
-
-		m_fxDiffuseMapVar->SetResource(m_GrassRV);	
-		m_WorldViewProjection = m_Floor.ReturnWorldMatrix()*view*proj;	
-		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );			// Updates WVP matrix in the internal cache of the effect object 
-		m_FxBoxWorldVar->SetMatrix((float*)&m_Floor.ReturnWorldMatrix() );	
-		pass->Apply(0);
-		m_Floor.Draw(m_Direct3DDevice);
+		m_Terrain.Draw(m_Direct3DDevice);
 	}
 
-	m_Sky.draw();	// Draw the sky
+	//m_Sky.draw();	// Draw the sky
 	
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};

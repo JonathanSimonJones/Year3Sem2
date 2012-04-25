@@ -87,10 +87,11 @@
     <ClInclude Include="HeaderFiles\GameTimer.h" />
     <ClInclude Include="HeaderFiles\InputLayouts.h" />
     <ClInclude Include="HeaderFiles\Light.h" />
+    <ClInclude Include="HeaderFiles\Line.hpp" />
     <ClInclude Include="HeaderFiles\Multisample.h" />
-    <ClInclude Include="HeaderFiles\Roof.h" />
     <ClInclude Include="HeaderFiles\Scene.h" />
     <ClInclude Include="HeaderFiles\Sky.h" />
+    <ClInclude Include="HeaderFiles\Terrain.hpp" />
     <ClInclude Include="HeaderFiles\TextureMgr.h" />
     <ClInclude Include="HeaderFiles\Triangle.h" />
     <ClInclude Include="HeaderFiles\Vertex.h" />
@@ -107,15 +108,23 @@
     <ClCompile Include="SourceFiles\Floor.cpp" />
     <ClCompile Include="SourceFiles\GameTimer.cpp" />
     <ClCompile Include="SourceFiles\InputLayouts.cpp" />
+    <ClCompile Include="SourceFiles\Line.cpp" />
     <ClCompile Include="SourceFiles\main.cpp" />
     <ClCompile Include="SourceFiles\MultiSample.cpp" />
-    <ClCompile Include="SourceFiles\Roof.cpp" />
     <ClCompile Include="SourceFiles\Scene.cpp" />
     <ClCompile Include="SourceFiles\Sky.cpp" />
+    <ClCompile Include="SourceFiles\Terrain.cpp" />
     <ClCompile Include="SourceFiles\TextureMgr.cpp" />
     <ClCompile Include="SourceFiles\Triangle.cpp" />
     <ClCompile Include="SourceFiles\VertexList.cpp" />
     <ClCompile Include="SourceFiles\WindowsClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EffectFiles\color.fx" />
+    <None Include="EffectFiles\cubemap.fx" />
+    <None Include="EffectFiles\lighthelper.fx" />
+    <None Include="EffectFiles\sky.fx" />
+    <None Include="EffectFiles\tex.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

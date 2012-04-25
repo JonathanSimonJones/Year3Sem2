@@ -7,8 +7,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "Sky.h"
-#include "Roof.h"
-#include "Floor.h"
+#include "Terrain.hpp"
 
 class Scene : public MyD3D10Code::Direct3D10Class
 {
@@ -55,11 +54,7 @@ private:
 
 	ID3D10ShaderResourceView* m_EnvironmentMapRV;
 
-	ID3D10ShaderResourceView* m_RoofTilesRV;
-	ID3D10ShaderResourceView* m_GrassRV;
-
-	Roof m_Roof;
-	Floor m_Floor;
+	Terrain m_Terrain;
 };
 
 #endif 
