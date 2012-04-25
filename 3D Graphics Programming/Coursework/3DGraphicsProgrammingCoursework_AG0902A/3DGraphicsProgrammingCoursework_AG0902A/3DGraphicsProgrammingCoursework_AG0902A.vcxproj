@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EBF5CD85-6625-46B1-9957-4C00D4B5AA40}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>My3DGraphicsProgrammingCoursework_AG0902A</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="DirectXDependancies.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="DirectXDependancies.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="HeaderFiles\Box.h" />
+    <ClInclude Include="HeaderFiles\Camera.h" />
+    <ClInclude Include="HeaderFiles\d3dUtil.h" />
+    <ClInclude Include="HeaderFiles\Direct3DSceneState.h" />
+    <ClInclude Include="HeaderFiles\DirectX10Class.h" />
+    <ClInclude Include="HeaderFiles\Effects.h" />
+    <ClInclude Include="HeaderFiles\Floor.h" />
+    <ClInclude Include="HeaderFiles\GameTimer.h" />
+    <ClInclude Include="HeaderFiles\InputLayouts.h" />
+    <ClInclude Include="HeaderFiles\Light.h" />
+    <ClInclude Include="HeaderFiles\Multisample.h" />
+    <ClInclude Include="HeaderFiles\Roof.h" />
+    <ClInclude Include="HeaderFiles\Scene.h" />
+    <ClInclude Include="HeaderFiles\Sky.h" />
+    <ClInclude Include="HeaderFiles\TextureMgr.h" />
+    <ClInclude Include="HeaderFiles\Triangle.h" />
+    <ClInclude Include="HeaderFiles\Vertex.h" />
+    <ClInclude Include="HeaderFiles\VertexList.h" />
+    <ClInclude Include="HeaderFiles\WindowsClass.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SourceFiles\Box.cpp" />
+    <ClCompile Include="SourceFiles\Camera.cpp" />
+    <ClCompile Include="SourceFiles\d3dUtil.cpp" />
+    <ClCompile Include="SourceFiles\Direct3DSceneState.cpp" />
+    <ClCompile Include="SourceFiles\DirectX10Class.cpp" />
+    <ClCompile Include="SourceFiles\Effects.cpp" />
+    <ClCompile Include="SourceFiles\Floor.cpp" />
+    <ClCompile Include="SourceFiles\GameTimer.cpp" />
+    <ClCompile Include="SourceFiles\InputLayouts.cpp" />
+    <ClCompile Include="SourceFiles\main.cpp" />
+    <ClCompile Include="SourceFiles\MultiSample.cpp" />
+    <ClCompile Include="SourceFiles\Roof.cpp" />
+    <ClCompile Include="SourceFiles\Scene.cpp" />
+    <ClCompile Include="SourceFiles\Sky.cpp" />
+    <ClCompile Include="SourceFiles\TextureMgr.cpp" />
+    <ClCompile Include="SourceFiles\Triangle.cpp" />
+    <ClCompile Include="SourceFiles\VertexList.cpp" />
+    <ClCompile Include="SourceFiles\WindowsClass.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
