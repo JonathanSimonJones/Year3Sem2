@@ -9,6 +9,7 @@
 Debug/
 Release/
 UniversalStoryRepo/
+ipch/
 
 # OS generated files #
 ######################
