@@ -183,7 +183,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the horizontal blur render to texture object.
-	result = m_HorizontalBlurTexture->Initialize(m_D3D->GetDevice(), downSampleWidth, downSampleHeight, SCREEN_DEPTH, SCREEN_NEAR);
+	result = m_HorizontalBlurTexture->Initialize(m_D3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the horizontal blur render to texture object.", L"Error", MB_OK);
@@ -198,7 +198,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the vertical blur render to texture object.
-	result = m_VerticalBlurTexture->Initialize(m_D3D->GetDevice(), downSampleWidth, downSampleHeight, SCREEN_DEPTH, SCREEN_NEAR);
+	result = m_VerticalBlurTexture->Initialize(m_D3D->GetDevice(), screenWidth, screenHeight, SCREEN_DEPTH, SCREEN_NEAR);
 	if(!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the vertical blur render to texture object.", L"Error", MB_OK);
@@ -401,7 +401,7 @@ bool GraphicsClass::Render(float rotation)
 	RenderSceneToTexture(rotation);
 
 	// Next down sample the render texture to a smaller sized texture.
-	DownSampleTexture();
+	//DownSampleTexture();
 
 	// Perform a horizontal blur on the down sampled render texture.
 	RenderHorizontalBlurToTexture();
@@ -410,7 +410,7 @@ bool GraphicsClass::Render(float rotation)
 	RenderVerticalBlurToTexture();
 
 	// Up sample the final blurred render texture to screen size again.
-	UpSampleTexture();
+	//UpSampleTexture();
 
 	// Render the blurred up sampled render texture to the screen.
 	Render2DTextureScene();
@@ -443,10 +443,10 @@ void GraphicsClass::RenderSceneToTexture(float rotation)
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_D3D->GetDevice());
-	m_SecondCube->Render(m_D3D->GetDevice());
+	//m_SecondCube->Render(m_D3D->GetDevice());
 
 	// Render the model using the texture shader.
-	m_TextureShader->Render(m_D3D->GetDevice(), m_Model->GetIndexCount() + m_SecondCube->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
+	m_TextureShader->Render(m_D3D->GetDevice(), m_Model->GetIndexCount() /*+ m_SecondCube->GetIndexCount()*/, worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
 
 	// Reset the render target back to the original back buffer and not the render to texture anymore.
 	m_D3D->SetBackBufferRenderTarget();
@@ -461,7 +461,6 @@ void GraphicsClass::RenderSceneToTexture(float rotation)
 void GraphicsClass::DownSampleTexture()
 {
 	D3DXMATRIX worldMatrix, viewMatrix, orthoMatrix;
-
 
 	// Set the render target to be the render to texture.
 	m_DownSampleTexure->SetRenderTarget(m_D3D->GetDevice());
@@ -534,8 +533,8 @@ void GraphicsClass::RenderHorizontalBlurToTexture()
 	m_SmallWindow->Render(m_D3D->GetDevice());
 	
 	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
-	m_HorizontalBlurShader->Render(m_D3D->GetDevice(), m_SmallWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
-								   m_DownSampleTexure->GetShaderResourceView(), screenSizeX);
+	m_HorizontalBlurShader->Render(m_D3D->GetDevice(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
+								   m_RenderTexture->GetShaderResourceView(), screenSizeX);
 
 	// Turn the Z buffer back on now that all 2D rendering has completed.
 	m_D3D->TurnZBufferOn();
@@ -582,7 +581,7 @@ void GraphicsClass::RenderVerticalBlurToTexture()
 	m_SmallWindow->Render(m_D3D->GetDevice());
 	
 	// Render the small ortho window using the vertical blur shader and the horizontal blurred render to texture resource.
-	m_VerticalBlurShader->Render(m_D3D->GetDevice(), m_SmallWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
+	m_VerticalBlurShader->Render(m_D3D->GetDevice(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
 								 m_HorizontalBlurTexture->GetShaderResourceView(), screenSizeY);
 
 	// Turn the Z buffer back on now that all 2D rendering has completed.
@@ -666,7 +665,7 @@ void GraphicsClass::Render2DTextureScene()
 
 	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
 	m_TextureShader->Render(m_D3D->GetDevice(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 
-							m_UpSampleTexure->GetShaderResourceView());
+							m_VerticalBlurTexture->GetShaderResourceView());
 
 	// Turn the Z buffer back on now that all 2D rendering has completed.
 	m_D3D->TurnZBufferOn();

@@ -45,6 +45,7 @@ struct PixelInputType
 PixelInputType TextureVertexShader(VertexInputType input)
 {
     PixelInputType output;
+	//matrix secondWorldMatrix;
     
     
 	// Change the position vector to be 4 units for proper matrix calculations.
