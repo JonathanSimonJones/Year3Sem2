@@ -81,6 +81,12 @@
     <ClInclude Include="HeaderFiles\Rendertextureclass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\orthowindowclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\textureshaderclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\Box.cpp">
@@ -143,6 +149,12 @@
     <ClCompile Include="SourceFiles\Rendertextureclass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SourceFiles\orthowindowclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\textureshaderclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="EffectFiles\color.fx">
@@ -158,6 +170,9 @@
       <Filter>EffectFiles</Filter>
     </None>
     <None Include="EffectFiles\tex.fx">
+      <Filter>EffectFiles</Filter>
+    </None>
+    <None Include="EffectFiles\texture.fx">
       <Filter>EffectFiles</Filter>
     </None>
   </ItemGroup>

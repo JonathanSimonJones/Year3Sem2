@@ -10,6 +10,9 @@
 #include "Terrain.hpp"
 #include "Rendertextureclass.h"
 
+class OrthoWindowClass;
+class TextureShaderClass;
+
 class Scene : public MyD3D10Code::Direct3D10Class
 {
 public:
@@ -21,6 +24,7 @@ public:
 private:
 	void RenderUsingPostProcessing();
 	void RenderToTexture();
+	void RenderToBackBuffer();
 private:
 	D3DXMATRIX m_WorldViewProjection;
 
@@ -61,6 +65,10 @@ private:
 	Terrain m_Terrain;
 
 	RenderTextureClass m_RenderTexture;
+
+	OrthoWindowClass *m_FullScreenWindow;
+
+	TextureShaderClass* m_TextureShader;
 };
 
 #endif 

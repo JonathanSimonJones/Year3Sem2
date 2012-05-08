@@ -34,10 +34,10 @@ void Terrain::Initialise(ID3D10Device* Direct3DDevice, int n)
 	CreateTerrainVertices( n );
 
     D3D10_BUFFER_DESC vbd;
-    vbd.Usage = D3D10_USAGE_IMMUTABLE;
+    vbd.Usage = D3D10_USAGE_DYNAMIC;
     vbd.ByteWidth = sizeof(vertices[0]) * mNumVertices;
     vbd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
+    vbd.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
     vbd.MiscFlags = 0;
     
 	D3D10_SUBRESOURCE_DATA vinitData;

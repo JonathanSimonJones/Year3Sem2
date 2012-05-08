@@ -47,6 +47,9 @@ namespace MyD3D10Code
 		void TickTimer();
 		float GetDeltaTime();
 		void ResetDefaultRenderTargets();
+		void CreateDepthStencilStates();
+		void TurnZBufferOff();
+		void TurnZBufferOn();
 	protected:
 		HWND m_DirectX10ClassWindowHandle;	// Handle to the window 
 
@@ -79,6 +82,10 @@ namespace MyD3D10Code
 
 		//
 		Direct3DSceneStates m_SceneStates;
+
+		// 
+		ID3D10DepthStencilState* m_DepthStencilState;
+		ID3D10DepthStencilState* m_DepthDisabledStencilState;
 	};
 }
 #endif

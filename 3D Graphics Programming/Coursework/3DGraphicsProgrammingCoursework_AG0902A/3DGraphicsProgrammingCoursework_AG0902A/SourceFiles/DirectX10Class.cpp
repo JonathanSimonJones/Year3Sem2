@@ -16,8 +16,10 @@ namespace MyD3D10Code
 	m_Font(0),
 	m_Timer(),
 	m_FrameStats(L""),
-	m_ClearColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) ),
-	m_SceneStates()
+	m_ClearColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f) ),
+	m_SceneStates(),
+	m_DepthStencilState(0),
+	m_DepthDisabledStencilState(0)
 	{
 		// Create a swap chain description and pass this to the function which creates the swap chain and the device
 		CreateTheSwapChainAndDirect3DDevice( CreateSwapChainDesc() );
@@ -36,6 +38,9 @@ namespace MyD3D10Code
 
 		// Create the font object for text output
 		CreateFontObject( CreateFontDescription() );
+
+		// Create the depth stencil states
+		CreateDepthStencilStates();
 	}
 
 	Direct3D10Class::~Direct3D10Class()
@@ -268,13 +273,12 @@ namespace MyD3D10Code
 
 	void Direct3D10Class::DrawScene()
 	{
-		/*
+
 		m_Direct3DDevice->ClearRenderTargetView(m_RenderTargetView, m_ClearColor);
 		m_Direct3DDevice->ClearDepthStencilView(m_DepthStencilView,						// The view to clear 
 												D3D10_CLEAR_DEPTH|D3D10_CLEAR_STENCIL,	// Which buffer/buffers to clear
 												1.0f,									// The float value set to set each pixel to in the depth buffer
 												0);										// The interger value to set each pixel to in the stencil buffer
-												*/
 		// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 		//RECT R = {5, 5, 0, 0};
 		//m_Font->DrawText(0, m_FrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
@@ -380,5 +384,72 @@ namespace MyD3D10Code
 	void Direct3D10Class::ResetDefaultRenderTargets()
 	{
 		m_Direct3DDevice->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	}
+
+	void Direct3D10Class::CreateDepthStencilStates()
+	{
+		D3D10_DEPTH_STENCIL_DESC depthStencilDesc;
+
+		// Initialize the description of the stencil state.
+		ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+		// Set up the description of the stencil state.
+		depthStencilDesc.DepthEnable = true;
+		depthStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ALL;
+		depthStencilDesc.DepthFunc = D3D10_COMPARISON_LESS;
+
+		depthStencilDesc.StencilEnable = true;
+		depthStencilDesc.StencilReadMask = 0xFF;
+		depthStencilDesc.StencilWriteMask = 0xFF;
+
+		// Stencil operations if pixel is front-facing.
+		depthStencilDesc.FrontFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
+		depthStencilDesc.FrontFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.FrontFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+
+		// Stencil operations if pixel is back-facing.
+		depthStencilDesc.BackFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
+		depthStencilDesc.BackFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+		depthStencilDesc.BackFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+
+		// Create the depth stencil state.
+		m_Direct3DDevice->CreateDepthStencilState(&depthStencilDesc, &m_DepthStencilState);
+
+		D3D10_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+
+		// Clear the second depth stencil state before setting the parameters.
+		ZeroMemory(&depthDisabledStencilDesc, sizeof(depthDisabledStencilDesc));
+
+		// Now create a second depth stencil state which turns off the Z buffer for 2D rendering.  The only difference is 
+		// that DepthEnable is set to false, all other parameters are the same as the other depth stencil state.
+		depthDisabledStencilDesc.DepthEnable = false;
+		depthDisabledStencilDesc.DepthWriteMask = D3D10_DEPTH_WRITE_MASK_ALL;
+		depthDisabledStencilDesc.DepthFunc = D3D10_COMPARISON_LESS;
+		depthDisabledStencilDesc.StencilEnable = true;
+		depthDisabledStencilDesc.StencilReadMask = 0xFF;
+		depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+		depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D10_STENCIL_OP_INCR;
+		depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.FrontFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+		depthDisabledStencilDesc.BackFace.StencilFailOp = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D10_STENCIL_OP_DECR;
+		depthDisabledStencilDesc.BackFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
+		depthDisabledStencilDesc.BackFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
+
+		// Create the state using the device.
+		m_Direct3DDevice->CreateDepthStencilState(&depthDisabledStencilDesc, &m_DepthDisabledStencilState);
+	}
+
+	void Direct3D10Class::TurnZBufferOff()
+	{
+		m_Direct3DDevice->OMSetDepthStencilState(m_DepthDisabledStencilState, 1);
+	}
+
+	void Direct3D10Class::TurnZBufferOn()
+	{
+		m_Direct3DDevice->OMSetDepthStencilState(m_DepthStencilState, 1);
 	}
 }

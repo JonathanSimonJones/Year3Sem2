@@ -27,7 +27,7 @@ void VS(float3 iPosL : POSITION,
 float4 PS(float4 posH	: SV_POSITION,
 		  float4 color	: COLOR) : SV_Target  // SV_Target indicates the returned value should be in render target format
 {
-	return color;
+	return float4(1.0f,0.0f,1.0f,1.0f);
 }
 
 technique10 ColorTech

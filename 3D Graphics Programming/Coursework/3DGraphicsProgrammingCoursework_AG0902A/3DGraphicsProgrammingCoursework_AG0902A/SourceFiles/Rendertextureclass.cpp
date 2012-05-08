@@ -177,7 +177,7 @@ void RenderTextureClass::SetRenderTarget(ID3D10Device* device)
 	device->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 	
 	// Set the viewport.
-    //device->RSSetViewports(1, &m_viewport);
+    device->RSSetViewports(1, &m_viewport);
 
 	return;
 }
@@ -197,7 +197,7 @@ void RenderTextureClass::ClearRenderTarget(ID3D10Device* device, float red, floa
 	device->ClearRenderTargetView(m_renderTargetView, color);
     
 	// Clear the depth buffer.
-	device->ClearDepthStencilView(m_depthStencilView, D3D10_CLEAR_DEPTH | D3D10_CLEAR_STENCIL , 1.0f, 0);
+	device->ClearDepthStencilView(m_depthStencilView, D3D10_CLEAR_DEPTH, 1.0f, 0);
 
 	return;
 }

@@ -27,7 +27,7 @@ SamplerState gSampler
 RasterizerState WireFrame
 {
 	FillMode = Wireframe;
-	CullMode = Back;
+	CullMode = back;
 	FrontCounterClockwise = true;
 };
 
@@ -67,6 +67,9 @@ VS_OUT VS(VS_IN vIn)
 
 float4 PS(VS_OUT pIn) : SV_Target  // SV_Target indicates the returned value should be in render target format
 {
+
+	//return float4(1.0f, 0.0f, 0.0f, 1.0f);
+	
 	// Get materials from texture map
 	float4 diffuse	= gDiffuseMap.Sample(gSampler, pIn.Tex);	// Apply colour from texture to vert
 	float4 spec		= gSpecMap.Sample( gSampler, pIn.Tex);		// Apply specular value to vert
@@ -83,6 +86,8 @@ float4 PS(VS_OUT pIn) : SV_Target  // SV_Target indicates the returned value sho
 
 	// Return pixel fragment colour
 	return float4(litColour, diffuse.a);
+	
+	
 }
 
 technique10 ColorTech

@@ -2,6 +2,8 @@
 #include "..\\HeaderFiles\\Effects.h"
 #include "..\\HeaderFiles\\InputLayouts.h"
 #include "..\\HeaderFiles\\TextureMgr.h"
+#include "..\\HeaderFiles\\orthowindowclass.h"
+#include "..\\HeaderFiles\\textureshaderclass.h"
 
 Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight)
 : MyD3D10Code::Direct3D10Class(TheWindow, WindowWidth, WindowHeight)
@@ -21,6 +23,8 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 , m_FxBoxWorldVar(0)
 , m_EnvironmentMapRV(0)
 , m_RenderTexture()
+, m_FullScreenWindow(0)
+, m_TextureShader(0)
 {
 	// Initialise world view projection matrix
 	D3DXMatrixIdentity(&m_WorldViewProjection);
@@ -77,6 +81,18 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 
 	// Initialise render texture
 	m_RenderTexture.Initialize(m_Direct3DDevice, WindowWidth, WindowHeight);
+
+	// Create the full screen ortho window object.
+	m_FullScreenWindow = new OrthoWindowClass;
+
+	// Initialize the full screen ortho window object.
+	m_FullScreenWindow->Initialize(m_Direct3DDevice, WindowWidth, WindowHeight);
+
+	// Create the texture shader object.
+	m_TextureShader = new TextureShaderClass;
+
+	// Initialize the texture shader object.
+	m_TextureShader->Initialize(m_Direct3DDevice, TheWindow);
 }
 
 Scene::~Scene()
@@ -184,6 +200,7 @@ void Scene::UpdateScene(float dt)
 void Scene::DrawScene()
 {
 	MyD3D10Code::Direct3D10Class::DrawScene();
+
 	/*
 	// Restore Default states, input layout and primitive topology 
 	// as m_Font->DrawText changes them. Note that we can restore
@@ -227,9 +244,9 @@ void Scene::DrawScene()
 		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );		// Updates WVP matrix in the internal cache of the effect object
 		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );
 		pass->Apply(0);
-		//m_Box.Draw(m_Direct3DDevice);
+		m_Box.Draw(m_Direct3DDevice);
 
-		m_Terrain.Draw(m_Direct3DDevice);
+		//m_Terrain.Draw(m_Direct3DDevice);
 	}
 	*/
 	//m_Sky.draw();	// Draw the sky
@@ -249,6 +266,8 @@ void Scene::DrawScene()
 void Scene::RenderUsingPostProcessing()
 {
 	Scene::RenderToTexture();
+
+	Scene::RenderToBackBuffer();
 }
 
 void Scene::RenderToTexture()
@@ -259,7 +278,6 @@ void Scene::RenderToTexture()
 	// Clear the render to texture
 	m_RenderTexture.ClearRenderTarget(m_Direct3DDevice, 0.0f, 1.0f, 0.0f, 1.0f);
 
-	/*
 	// Render the scene
 	// Restore Default states, input layout and primitive topology 
 	// as m_Font->DrawText changes them. Note that we can restore
@@ -303,9 +321,34 @@ void Scene::RenderToTexture()
 		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );		// Updates WVP matrix in the internal cache of the effect object
 		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );
 		pass->Apply(0);
-		//m_Box.Draw(m_Direct3DDevice);
+		m_Box.Draw(m_Direct3DDevice);
 
 		m_Terrain.Draw(m_Direct3DDevice);
 	}
-	*/
+	m_Sky.draw();	// Draw the sky
+}
+
+void Scene::RenderToBackBuffer()
+{
+	D3DXMATRIX worldMatrix;
+
+	// Initialize the world matrix to the identity matrix.
+    D3DXMatrixIdentity(&worldMatrix);
+	
+	Direct3D10Class::ResetDefaultRenderTargets();
+
+	Direct3D10Class::TurnZBufferOff();
+
+	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_FullScreenWindow->Render(m_Direct3DDevice);
+
+	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
+	m_TextureShader->Render(m_Direct3DDevice, 
+							m_FullScreenWindow->GetIndexCount(), 
+							worldMatrix, 
+							GetCamera().view(), 
+							GetCamera().proj(), 
+							m_RenderTexture.GetShaderResourceView());
+
+	Direct3D10Class::TurnZBufferOn();
 }
