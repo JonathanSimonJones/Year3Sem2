@@ -318,5 +318,7 @@ void ModelClass::ReleaseModel()
 
 void ModelClass::SetPosition(float x, float y, float z)
 {
-	m_vertexBuffer->Map(D3D10_MAP_READ_WRITE, 0, 0);
+	m_vertexBuffer->Map(D3D10_MAP_READ_WRITE, 0, (void**)&m_vertexBuffer);
+
+
 }

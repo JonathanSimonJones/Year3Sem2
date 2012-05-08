@@ -8,6 +8,7 @@
 #include "Light.h"
 #include "Sky.h"
 #include "Terrain.hpp"
+#include "Rendertextureclass.h"
 
 class Scene : public MyD3D10Code::Direct3D10Class
 {
@@ -17,6 +18,9 @@ public:
 
 	void UpdateScene(float dt);
 	void DrawScene();
+private:
+	void RenderUsingPostProcessing();
+	void RenderToTexture();
 private:
 	D3DXMATRIX m_WorldViewProjection;
 
@@ -55,6 +59,8 @@ private:
 	ID3D10ShaderResourceView* m_EnvironmentMapRV;
 
 	Terrain m_Terrain;
+
+	RenderTextureClass m_RenderTexture;
 };
 
 #endif 

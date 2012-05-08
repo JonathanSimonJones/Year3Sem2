@@ -89,6 +89,7 @@
     <ClInclude Include="HeaderFiles\Light.h" />
     <ClInclude Include="HeaderFiles\Line.hpp" />
     <ClInclude Include="HeaderFiles\Multisample.h" />
+    <ClInclude Include="HeaderFiles\Rendertextureclass.h" />
     <ClInclude Include="HeaderFiles\Scene.h" />
     <ClInclude Include="HeaderFiles\Sky.h" />
     <ClInclude Include="HeaderFiles\Terrain.hpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="SourceFiles\Line.cpp" />
     <ClCompile Include="SourceFiles\main.cpp" />
     <ClCompile Include="SourceFiles\MultiSample.cpp" />
+    <ClCompile Include="SourceFiles\Rendertextureclass.cpp" />
     <ClCompile Include="SourceFiles\Scene.cpp" />
     <ClCompile Include="SourceFiles\Sky.cpp" />
     <ClCompile Include="SourceFiles\Terrain.cpp" />

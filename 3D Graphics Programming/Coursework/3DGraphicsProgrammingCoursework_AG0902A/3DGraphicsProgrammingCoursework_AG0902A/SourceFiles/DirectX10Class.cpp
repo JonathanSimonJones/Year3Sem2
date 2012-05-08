@@ -16,7 +16,7 @@ namespace MyD3D10Code
 	m_Font(0),
 	m_Timer(),
 	m_FrameStats(L""),
-	m_ClearColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f) ),
+	m_ClearColor(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) ),
 	m_SceneStates()
 	{
 		// Create a swap chain description and pass this to the function which creates the swap chain and the device
@@ -268,12 +268,13 @@ namespace MyD3D10Code
 
 	void Direct3D10Class::DrawScene()
 	{
+		/*
 		m_Direct3DDevice->ClearRenderTargetView(m_RenderTargetView, m_ClearColor);
 		m_Direct3DDevice->ClearDepthStencilView(m_DepthStencilView,						// The view to clear 
 												D3D10_CLEAR_DEPTH|D3D10_CLEAR_STENCIL,	// Which buffer/buffers to clear
 												1.0f,									// The float value set to set each pixel to in the depth buffer
 												0);										// The interger value to set each pixel to in the stencil buffer
-
+												*/
 		// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 		//RECT R = {5, 5, 0, 0};
 		//m_Font->DrawText(0, m_FrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
@@ -374,5 +375,10 @@ namespace MyD3D10Code
 	float Direct3D10Class::GetDeltaTime()
 	{
 		return m_Timer.getDeltaTime();
+	}
+
+	void Direct3D10Class::ResetDefaultRenderTargets()
+	{
+		m_Direct3DDevice->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 	}
 }

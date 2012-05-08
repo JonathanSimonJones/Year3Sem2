@@ -46,6 +46,7 @@ namespace MyD3D10Code
 		void StartTimer();
 		void TickTimer();
 		float GetDeltaTime();
+		void ResetDefaultRenderTargets();
 	protected:
 		HWND m_DirectX10ClassWindowHandle;	// Handle to the window 
 

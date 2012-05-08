@@ -20,6 +20,7 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 , m_FxTexMatVar(0)
 , m_FxBoxWorldVar(0)
 , m_EnvironmentMapRV(0)
+, m_RenderTexture()
 {
 	// Initialise world view projection matrix
 	D3DXMatrixIdentity(&m_WorldViewProjection);
@@ -73,6 +74,9 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 
 	m_Terrain.Initialise(m_Direct3DDevice, 30);
 	m_Terrain.Generate(m_Direct3DDevice);
+
+	// Initialise render texture
+	m_RenderTexture.Initialize(m_Direct3DDevice, WindowWidth, WindowHeight);
 }
 
 Scene::~Scene()
@@ -180,7 +184,7 @@ void Scene::UpdateScene(float dt)
 void Scene::DrawScene()
 {
 	MyD3D10Code::Direct3D10Class::DrawScene();
-
+	/*
 	// Restore Default states, input layout and primitive topology 
 	// as m_Font->DrawText changes them. Note that we can restore
 	// the default states by passing null
@@ -227,14 +231,81 @@ void Scene::DrawScene()
 
 		m_Terrain.Draw(m_Direct3DDevice);
 	}
-
+	*/
 	//m_Sky.draw();	// Draw the sky
-	
+
+	// Render the post process scene
+	RenderUsingPostProcessing();
+
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};
 	m_Direct3DDevice->RSSetState(0);										// Set the rasterization state to the default state
 	m_Font->DrawText(0, m_FrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
-
+	
 	// Took this out and put it in Coloured cube DrawScene
 	m_SwapChain->Present(0, 0);
+}
+
+void Scene::RenderUsingPostProcessing()
+{
+	Scene::RenderToTexture();
+}
+
+void Scene::RenderToTexture()
+{
+	// Set the render target to be the render to texture 
+	m_RenderTexture.SetRenderTarget(m_Direct3DDevice);
+
+	// Clear the render to texture
+	m_RenderTexture.ClearRenderTarget(m_Direct3DDevice, 0.0f, 1.0f, 0.0f, 1.0f);
+
+	/*
+	// Render the scene
+	// Restore Default states, input layout and primitive topology 
+	// as m_Font->DrawText changes them. Note that we can restore
+	// the default states by passing null
+	m_Direct3DDevice->OMSetDepthStencilState(0, 0);
+	float blendFactors[] = {0.0f, 0.0f, 0.0f, 0.0f};
+	m_Direct3DDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
+	m_Direct3DDevice->IASetInputLayout(m_VertexLayout);									// Bind input layout to the device
+	m_Direct3DDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// Set primitive topology to triangle list
+
+	D3DXMATRIX view = GetCamera().view();
+	D3DXMATRIX proj = GetCamera().proj();
+
+	/////////////////////////
+	// Set constants 
+	/////////////////////////
+	m_fxDiffuseMapVar->SetResource(m_DiffuseMapRV);
+
+	m_FxSpecMapVar->SetResource(m_SpecMapRV);
+	m_FxEyePosVar->SetRawValue(&GetCamera().position(), 0, sizeof(D3DXVECTOR3) );
+	m_FxLightVar->SetRawValue(&m_ParallelLight, 0, sizeof(Light) );
+	
+	D3DXMATRIX texMat;
+	D3DXMatrixIdentity(&texMat);
+	m_FxTexMatVar->SetMatrix((float*)&texMat);
+	
+	///////////////////////////
+	// End constants 
+	///////////////////////////
+
+	D3D10_TECHNIQUE_DESC techDescription;
+	m_Tech->GetDesc( &techDescription );
+
+	for( UINT p = 0; p < techDescription.Passes; ++p)
+	{
+		//m_Tech->GetPassByIndex( p )->Apply(0);
+		ID3D10EffectPass* pass = m_Tech->GetPassByIndex(p);
+		
+		m_fxDiffuseMapVar->SetResource(m_DiffuseMapRV);
+		m_WorldViewProjection = m_Box.ReturnWorldMatrix()*view*proj;
+		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );		// Updates WVP matrix in the internal cache of the effect object
+		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );
+		pass->Apply(0);
+		//m_Box.Draw(m_Direct3DDevice);
+
+		m_Terrain.Draw(m_Direct3DDevice);
+	}
+	*/
 }
