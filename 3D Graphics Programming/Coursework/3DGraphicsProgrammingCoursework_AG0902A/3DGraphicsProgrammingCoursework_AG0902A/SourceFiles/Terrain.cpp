@@ -63,6 +63,7 @@ void Terrain::Initialise(ID3D10Device* Direct3DDevice, int n)
 
 void Terrain::Generate(ID3D10Device* Direct3DDevice)
 {
+	/*
 	srand ( time(NULL) );
 	
 	int test = 0;
@@ -99,6 +100,7 @@ void Terrain::Generate(ID3D10Device* Direct3DDevice)
 			}
 		}
 	}
+	*/
 	/*
 	Line TempLine2(-2.0f, 25.0f);
 
@@ -110,6 +112,22 @@ void Terrain::Generate(ID3D10Device* Direct3DDevice)
 		}
 	}
 	*/
+
+	Vertex *vert;
+
+	HRESULT result;
+	result = mVB->Map(D3D10_MAP_READ_WRITE, 0, (void**)&vert);
+
+	float j = 0.0f;
+
+	for( int i = 0; i < vertices.size(); i++)
+	{ 
+		vertices[i].pos.y += j;
+		j++;
+	}
+
+	mVB->Unmap();
+	/*
 	D3D10_BUFFER_DESC vbd;
     vbd.Usage = D3D10_USAGE_IMMUTABLE;
     vbd.ByteWidth = sizeof(vertices[0]) * mNumVertices;
@@ -120,7 +138,7 @@ void Terrain::Generate(ID3D10Device* Direct3DDevice)
 	D3D10_SUBRESOURCE_DATA vinitData;
     vinitData.pSysMem = &vertices[0];
     HR(Direct3DDevice->CreateBuffer(&vbd, &vinitData, &mVB));
-
+	*/
 }
 
 void Terrain::Draw(ID3D10Device* Direct3DDevice)
