@@ -2,11 +2,14 @@
 // Purpose: Class specification for an environmental sound placed in the 3D world.
 //          It is instantiated at a specific point and immediately plays in looping mode.
 // Author:  Allan C. Milne
+//			Jonathan Jones
 // Version: 1.0
 // Date:    13 April 2006
 
-#include "dsoundUtility.h"
+#ifndef ENV_SOUND_H_
+#define ENV_SOUND_H_
 
+#include "dsoundUtility.h"
 
 class EnvSound {
 
@@ -22,4 +25,8 @@ public:
 		float x, float y, float z);   // Position of sound in 3D.
 	~EnvSound ();
 
+	void SetPosition(const float x, const float y, const float z);
+	void Play();
 }; // end EnvSound class.
+
+#endif // ENV_SOUND_H_

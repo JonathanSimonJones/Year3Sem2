@@ -27,33 +27,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\HeaderFiles\dsoundUtility.h">
+    <ClInclude Include="HeaderFiles\EnvSound.h">
+      <Filter>Header Files\App</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\dsoundUtility.h">
       <Filter>Header Files\DirectSound</Filter>
     </ClInclude>
-    <ClInclude Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\HeaderFiles\Compass.h">
-      <Filter>Header Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\HeaderFiles\EnvSound.h">
-      <Filter>Header Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\HeaderFiles\TurningHead.h">
+    <ClInclude Include="HeaderFiles\Crowd.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\SourceFiles\dsoundUtility.cpp">
+    <ClCompile Include="SourceFiles\EnvSound.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\dsoundUtility.cpp">
       <Filter>Source Files\DirectSound</Filter>
     </ClCompile>
-    <ClCompile Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\SourceFiles\Compass.cpp">
+    <ClCompile Include="SourceFiles\FutureRaceApp.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
-    <ClCompile Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\SourceFiles\EnvSound.cpp">
-      <Filter>Source Files\App</Filter>
-    </ClCompile>
-    <ClCompile Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\SourceFiles\TurningHead.cpp">
-      <Filter>Source Files\App</Filter>
-    </ClCompile>
-    <ClCompile Include="\\vmwfil03\students$\0901264\Year3Sem2\Sound\Coursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\AG0901_0901264_PorgrammingEnvironmentsCoursework\SourceFiles\TurningHeadApp.cpp">
+    <ClCompile Include="SourceFiles\Crowd.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,7 +18,6 @@ EnvSound::EnvSound (
 	the3dSound = theSound->Get3dBuffer ();
 	if (!the3dSound) return;
 	the3dSound->SetPosition (x, y, z, DS3D_IMMEDIATE);
-	theSound->Play (DSBPLAY_LOOPING);
 } // end EnvSound constructor method
 
 
@@ -29,3 +28,13 @@ EnvSound::~EnvSound () {
 	theSound   = NULL;
 	the3dSound = NULL;
 } // end EnvSound destructor method
+
+void EnvSound::SetPosition(const float x, const float y, const float z)
+{
+	the3dSound->SetPosition(x, y, z, DS3D_IMMEDIATE);
+}
+
+void EnvSound::Play()
+{
+	theSound->Play(DSBPLAY_LOOPING);
+}
