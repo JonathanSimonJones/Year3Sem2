@@ -6,6 +6,9 @@
 #include "dsoundUtility.h"
 #include "EnvSound.h"
 #include <Crowd.h>
+#include <Ship.h>
+#include <Console.hpp>
+#include <iostream>
 
 // Forward declerations
 bool Setup();
@@ -16,13 +19,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 //--- Globals.
 //--- Program-wide resource declarations.
 
-// The number of environmental sounds making up the soundscape.
-#define ENVSOUNDS 3
-
 DSoundDevice* dsDevice     = NULL;    // DirectSound device.
-EnvSound*     soundscape[ENVSOUNDS];  // The environment sound buffers.
 
-Crowd * CrowdTest;
+Crowd *CrowdTest;
+Crowd *CrowdTest2;
+Sound *SoundPointer;
+Sound *Footsteps;
+Sound *BigDoor;
+Ship *Ship1;
 
 //--- Application entry point.
 //--- calls the framework functions.
@@ -59,6 +63,7 @@ int WINAPI WinMain(HINSTANCE hinstance,
 		return 0;
 	}
 
+	//Debug::displayConsole();
 	//--- set up the 'process' function as the message loop handler.
 	EnterMsgLoop (Process);
 
@@ -73,27 +78,72 @@ int WINAPI WinMain(HINSTANCE hinstance,
 
 //--- Framework Functions
 
-//--- Set up soundscape 3D buffers and the turning head.
+//--- Set up 
 //--- Returns false if error detected.
 bool Setup()
 {
-	//--- Sset up the soundscape and start playing it.
-	bool ok = true;
-	Sound* theSounds[ENVSOUNDS];
-	ok = ok && dsDevice->CreateSoundBuffer (&(theSounds[0]), "SoundFiles/EventSounds/EndOfRaceSound.wav", DSBCAPS_CTRL3D);
-	//ok = ok && dsDevice->CreateSoundBuffer (&(theSounds[1]), "SoundFiles\\car.wav", DSBCAPS_CTRL3D);
-	//ok = ok && dsDevice->CreateSoundBuffer (&(theSounds[2]), "SoundFiles\\jungle.wav", DSBCAPS_CTRL3D);
-	if (!ok) return false;            // sound buffer creation failed.
-	soundscape[0] = new EnvSound (theSounds[0], 0, 0, 0.0);
-	//soundscape[1] = new EnvSound (theSounds[1], 5, 0, 5);
-	//soundscape[2] = new EnvSound (theSounds[2], -2, 0, 0);
-
-	//soundscape[0]->Play();
-
+	//--- Set up the soundscape and start playing it.
+	// Create crowd 1
 	CrowdTest = new Crowd(dsDevice);
-	CrowdTest->CreateNewSound("SoundFiles/Ship/ShipMoving.wav");
+	CrowdTest->CreateNewSound("SoundFiles/Crowd/SmallCrowd1.wav");
 	CrowdTest->CreateNewSound("SoundFiles/Crowd/LargeCrowd1.wav");
+	CrowdTest->CreateNewSound("SoundFiles/Crowd/LargeCrowd2.wav");
+	CrowdTest->SetPosition(0.0f,0.0f, 17.5f);
+
+	// Create crowd 2
+	CrowdTest2 = new Crowd(dsDevice);
+	CrowdTest2->CreateNewSound("SoundFiles/Crowd/SmallCrowd2.wav");
+	CrowdTest2->CreateNewSound("SoundFiles/Crowd/LargeCrowd3.wav");
+	CrowdTest2->CreateNewSound("SoundFiles/Crowd/LargeCrowd4.wav");
+	CrowdTest2->SetPosition(0.0f,0.0f, -17.5f);
+	
+	// Bool to describe if creating the sound was successful
+	bool ok = true;
+
+	// Create footstep noise 
+	ok = ok && dsDevice->CreateSoundBuffer(&Footsteps, "SoundFiles/Player/FootstepsTarmac.wav", DSBCAPS_CTRLVOLUME );
+
+	// Create big door sound
+	ok = ok && dsDevice->CreateSoundBuffer(&BigDoor, "SoundFiles/EventSounds/DoorToCrowdOpening.wav", 0);
+
+	// Create the ship
+	Ship1 = new Ship(dsDevice);
+
+	//////////////////////////////////////////////////////
+	// Start beginning sequence
+	//////////////////////////////////////////////////////
+
+	BigDoor->Play();
 	CrowdTest->Play();
+	CrowdTest2->Play();
+	
+	// Wait till big door sound has finished playing
+	while(BigDoor->IsPlaying() )
+	{
+	}
+
+	// Start playing footsteps at a decreased volume level
+	Footsteps->Play(DSBPLAY_LOOPING, -500);
+
+	// Wait 
+	Sleep(5000);
+
+	// Stop footsteps
+	Footsteps->Stop();
+
+	// Play enter ship sequence
+	Ship1->EnterShipSequence();
+
+	// Lower the volume of the crowds so it appears that ship appears to be noise cancelling 
+	CrowdTest->SetPosition(0.0f,0.0f,75.f);
+	CrowdTest2->SetPosition(0.0f,0.0f,-75.f);
+
+	// Play the ship start sound sequence
+	Ship1->StartShip();
+
+	///////////////////////////////////////////////////////
+	// End beginning start sequence
+	///////////////////////////////////////////////////////
 
 	return true;
 }
@@ -102,23 +152,70 @@ bool Setup()
 //--- Clean up and release the sound resources.
 void Cleanup()
 {
-	for (int i=0; i<ENVSOUNDS; i++)
-	{
-		if (soundscape[i]) 
-		{
-			free (soundscape[i]);
-		}
-	}
+	delete Footsteps;
+	Footsteps = 0;
+
+	delete BigDoor;
+	BigDoor = 0;
 }
 
 float deleteMe = 0.0f;
+float tempX = 0.0f, tempY = 0.0f , tempZ = 0.0f;
 //--- Do the head turning.
 //--- Parameter is time since last call of this function.
 //--- Return false if error detected.
 //--- this function will be called through the windows message hanlding loop.
 bool Process (float timeDelta)
 { 
-	CrowdTest->SetPosition(0.0f, 0.0f, deleteMe+=0.1f);
+	float tempVarJJWhy = 0.0f;
+	tempVarJJWhy = timeDelta;
+
+	if(GetAsyncKeyState(VK_UP) & 0x0001)
+	{
+		//tempZ += tempVarJJWhy;
+		tempZ++;
+		dsDevice->Get3dListener()->SetPosition(tempX, tempY, tempZ, DS3D_IMMEDIATE );
+	}
+
+	if(GetAsyncKeyState(VK_DOWN) & 0x0001)
+	{
+		//tempZ -= tempVarJJWhy;
+		tempZ--;
+		dsDevice->Get3dListener()->SetPosition(tempX, tempY, tempZ, DS3D_IMMEDIATE );
+	}
+
+	if(GetAsyncKeyState(VK_LEFT) & 0x0001)
+	{
+		//tempX -= tempVarJJWhy;
+		tempX--;
+		dsDevice->Get3dListener()->SetPosition(tempX, tempY, tempZ, DS3D_IMMEDIATE );
+	}
+
+	if(GetAsyncKeyState(VK_RIGHT) & 0x0001)
+	{
+		//tempX += tempVarJJWhy;
+		tempX++;
+		dsDevice->Get3dListener()->SetPosition(tempX, tempY, tempZ, DS3D_IMMEDIATE );
+	}
+
+	/*
+	if(deleteMe < -100.0f)
+	{
+		timeDelta *= -1;
+	}
+
+	if(deleteMe > 100.0f)
+	{
+		timeDelta *= -1;
+	}
+
+	deleteMe += timeDelta;
+
+	CrowdTest->SetPosition(0.0f, 0.0f, deleteMe);
+	*/
+
+	//std::cout << RandTempVar << std::endl;
+
 	return true;
 }
 

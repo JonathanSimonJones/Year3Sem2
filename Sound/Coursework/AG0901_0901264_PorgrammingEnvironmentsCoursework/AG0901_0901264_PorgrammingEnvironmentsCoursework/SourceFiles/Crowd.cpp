@@ -17,6 +17,13 @@ Crowd::Crowd(DSoundDevice* DirectSoundDevice)
 
 Crowd::~Crowd()
 {
+	// Release all sound files 
+	while(CrowdList_.empty())
+	{
+		delete CrowdList_.back();
+
+		CrowdList_.pop_back();
+	}
 }
 
 void Crowd::CreateNewSound(char* NameOfFile)
@@ -46,6 +53,6 @@ void Crowd::Play()
 {
 	for(std::list<EnvSound*>::iterator iter = CrowdList_.begin(); iter != CrowdList_.end(); iter++)
 	{
-		(*iter)->Play();
+		(*iter)->PlayLooping();
 	}
 }

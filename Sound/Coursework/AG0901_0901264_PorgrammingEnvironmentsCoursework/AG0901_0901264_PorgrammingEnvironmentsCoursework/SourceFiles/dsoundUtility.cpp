@@ -61,7 +61,7 @@ bool InitWindow (
 	HWND hwnd = 0;
 	hwnd = CreateWindow (title, title, 
 		WS_EX_TOPMOST,
-		0, 0, width, height,
+		300, 0, width, height,
 		0 /*parent hwnd*/, 0 /* menu */, hInstance, 0 /*extra*/); 
 	if( !hwnd )
 	{

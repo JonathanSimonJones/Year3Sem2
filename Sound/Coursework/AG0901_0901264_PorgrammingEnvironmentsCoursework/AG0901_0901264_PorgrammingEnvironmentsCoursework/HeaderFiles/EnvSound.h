@@ -26,7 +26,11 @@ public:
 	~EnvSound ();
 
 	void SetPosition(const float x, const float y, const float z);
-	void Play();
+	void PlayLooping();
+	void PlayOnce();
+	void StopPlaying();
+	bool isPlaying();
+	void changePan(int Pan);
 }; // end EnvSound class.
 
 #endif // ENV_SOUND_H_

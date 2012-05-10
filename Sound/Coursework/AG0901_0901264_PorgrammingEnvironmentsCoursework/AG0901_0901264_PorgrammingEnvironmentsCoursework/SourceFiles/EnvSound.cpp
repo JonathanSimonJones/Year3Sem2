@@ -34,7 +34,27 @@ void EnvSound::SetPosition(const float x, const float y, const float z)
 	the3dSound->SetPosition(x, y, z, DS3D_IMMEDIATE);
 }
 
-void EnvSound::Play()
+void EnvSound::PlayLooping()
 {
 	theSound->Play(DSBPLAY_LOOPING);
+}
+
+void EnvSound::PlayOnce()
+{
+	theSound->Play();
+}
+
+void EnvSound::StopPlaying()
+{
+	theSound->Stop();
+}
+
+bool EnvSound::isPlaying()
+{
+	return theSound->IsPlaying();
+}
+
+void EnvSound::changePan(int Pan)
+{
+	theSound->ChangePan(Pan);
 }

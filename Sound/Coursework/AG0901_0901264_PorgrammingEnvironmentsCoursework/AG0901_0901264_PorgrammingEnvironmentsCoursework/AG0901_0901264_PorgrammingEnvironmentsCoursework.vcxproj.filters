@@ -36,6 +36,12 @@
     <ClInclude Include="HeaderFiles\Crowd.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
+    <ClInclude Include="HeaderFiles\Ship.h">
+      <Filter>Header Files\App</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderFiles\Console.hpp">
+      <Filter>Header Files\App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceFiles\EnvSound.cpp">
@@ -48,6 +54,12 @@
       <Filter>Source Files\App</Filter>
     </ClCompile>
     <ClCompile Include="SourceFiles\Crowd.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Ship.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceFiles\Console.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
   </ItemGroup>

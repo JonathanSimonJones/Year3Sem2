@@ -11,15 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderFiles\Console.hpp" />
     <ClInclude Include="HeaderFiles\Crowd.h" />
     <ClInclude Include="HeaderFiles\dsoundUtility.h" />
     <ClInclude Include="HeaderFiles\EnvSound.h" />
+    <ClInclude Include="HeaderFiles\Ship.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SourceFiles\Console.cpp" />
     <ClCompile Include="SourceFiles\Crowd.cpp" />
     <ClCompile Include="SourceFiles\dsoundUtility.cpp" />
     <ClCompile Include="SourceFiles\EnvSound.cpp" />
     <ClCompile Include="SourceFiles\FutureRaceApp.cpp" />
+    <ClCompile Include="SourceFiles\Ship.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{55933919-0145-4475-84EC-9FE82B195AC0}</ProjectGuid>
