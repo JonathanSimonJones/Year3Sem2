@@ -13,6 +13,8 @@
 EnvSound::EnvSound (
 		Sound* soundBuff,             // 2D sound buffer.
 		float x, float y, float z)    // Position of sound in 3D.
+: x_(x)
+, z_(z)
 {
 	theSound   = soundBuff;
 	the3dSound = theSound->Get3dBuffer ();
@@ -57,4 +59,20 @@ bool EnvSound::isPlaying()
 void EnvSound::changePan(int Pan)
 {
 	theSound->ChangePan(Pan);
+}
+
+float EnvSound::getX()
+{
+	D3DVECTOR tempVec;
+	the3dSound->GetPosition(&tempVec);
+	x_ = tempVec.x;
+	return x_;
+}
+
+float EnvSound::getZ()
+{
+	D3DVECTOR tempVec;
+	the3dSound->GetPosition(&tempVec);
+	z_ = tempVec.z;
+	return z_;
 }

@@ -56,3 +56,11 @@ void Crowd::Play()
 		(*iter)->PlayLooping();
 	}
 }
+
+void Crowd::Stop()
+{
+	for(std::list<EnvSound*>::iterator iter = CrowdList_.begin(); iter != CrowdList_.end(); iter++)
+	{
+		(*iter)->StopPlaying();
+	}
+}

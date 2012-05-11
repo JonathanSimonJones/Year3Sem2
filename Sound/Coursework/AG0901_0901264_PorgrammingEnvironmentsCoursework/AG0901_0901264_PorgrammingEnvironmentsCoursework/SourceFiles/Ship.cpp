@@ -22,12 +22,12 @@ Ship::Ship(DSoundDevice* DirectSoundDevice)
 	Sound *SoundPtrShipDoorOpening_;
 	Sound *SoundPtrShipDoorClosing_;
 	Sound *SoundPtrShipIdle_;
-	Sound *SoundPtrShipMoving_;
 	Sound *SoundPtrShipPoweringDown_;
 	Sound *SoundPtrShipPowerUp_;
 	Sound *SoundPtrShipPowerUp2_;
 	Sound *SoundPtrWub1_;
 	Sound *SoundPtrSeatMovement_;
+	Sound *SoundPtrShipMoving_;
 
 	bool ok = true;
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrButton1_			, "SoundFiles/Ship/Button1.wav"			, DSBCAPS_CTRL3D);
@@ -37,12 +37,12 @@ Ship::Ship(DSoundDevice* DirectSoundDevice)
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipDoorOpening_	, "SoundFiles/Ship/ShipDoorOpening.wav"	, DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipDoorClosing_	, "SoundFiles/Ship/ShipDoorClosing.wav"	, DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipIdle_			, "SoundFiles/Ship/ShipIdle.wav"		, DSBCAPS_CTRL3D);
-	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipMoving_		, "SoundFiles/Ship/ShipMoving.wav"		, DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipPoweringDown_	, "SoundFiles/Ship/ShipPoweringDown.wav", DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipPowerUp_		, "SoundFiles/Ship/ShipPowerUp.wav"		, DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipPowerUp2_		, "SoundFiles/Ship/ShipPowerUp2.wav"	, DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrWub1_				, "SoundFiles/Ship/Wub1.wav"			, DSBCAPS_CTRL3D);
 	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrSeatMovement_		, "SoundFiles/Player/OutfitRustle.wav"	, DSBCAPS_CTRL3D);
+	ok = ok && DirectSoundDevice_->CreateSoundBuffer(&SoundPtrShipMoving_		, "SoundFiles/Ship/ShipMoving.wav"		, DSBCAPS_CTRL3D);
 
 	Button1_			= new EnvSound(SoundPtrButton1_			, x_, y_, z_ + 5.0f);
 	Button2_			= new EnvSound(SoundPtrButton2_			, x_, y_, z_);
@@ -51,12 +51,12 @@ Ship::Ship(DSoundDevice* DirectSoundDevice)
 	ShipDoorOpening_	= new EnvSound(SoundPtrShipDoorOpening_	, x_, y_, z_ + 5.0f);
 	ShipDoorClosing_	= new EnvSound(SoundPtrShipDoorClosing_	, x_ + 5.0f, y_, z_);
 	ShipIdle_			= new EnvSound(SoundPtrShipIdle_		, x_, y_, z_);
-	ShipMoving_			= new EnvSound(SoundPtrShipMoving_		, x_, y_, z_);
 	ShipPoweringDown_	= new EnvSound(SoundPtrShipPoweringDown_, x_, y_, z_);
 	ShipPowerUp_		= new EnvSound(SoundPtrShipPowerUp_		, x_, y_, z_);
 	ShipPowerUp2_		= new EnvSound(SoundPtrShipPowerUp2_	, x_, y_, z_);
 	Wub1_				= new EnvSound(SoundPtrWub1_			, x_, y_, z_);
 	SeatMovement_		= new EnvSound(SoundPtrSeatMovement_	, x_, y_, z_);
+	ShipMoving_			= new EnvSound(SoundPtrShipMoving_		, x_, y_, z_);
 
 	SoundPtrButton1_ = 0;
 	SoundPtrButton2_ = 0;
@@ -65,13 +65,12 @@ Ship::Ship(DSoundDevice* DirectSoundDevice)
 	SoundPtrShipDoorOpening_ = 0;
 	SoundPtrShipDoorClosing_ = 0;
 	SoundPtrShipIdle_ = 0;
-	SoundPtrShipMoving_ = 0;
 	SoundPtrShipPoweringDown_ = 0;
 	SoundPtrShipPowerUp_ = 0;
 	SoundPtrShipPowerUp2_ = 0;
 	SoundPtrWub1_ = 0;
 	SoundPtrSeatMovement_ = 0;
-	
+	SoundPtrShipMoving_ = 0;
 }
 
 Ship::~Ship()
@@ -83,12 +82,12 @@ Ship::~Ship()
 	delete ShipDoorOpening_;
 	delete ShipDoorClosing_;
 	delete ShipIdle_;
-	delete ShipMoving_;
 	delete ShipPoweringDown_;
 	delete ShipPowerUp_;
 	delete ShipPowerUp2_;
 	delete Wub1_;
-	delete SeatMovement_;	
+	delete SeatMovement_;
+	delete ShipMoving_;
 
 	Button1_ = 0;
 	Button2_ = 0;
@@ -97,12 +96,13 @@ Ship::~Ship()
 	ShipDoorOpening_ = 0;
 	ShipDoorClosing_ = 0;
 	ShipIdle_ = 0;
-	ShipMoving_ = 0;
 	ShipPoweringDown_ = 0;
 	ShipPowerUp_ = 0;
 	ShipPowerUp2_ = 0;
 	Wub1_ = 0;
 	SeatMovement_ = 0;
+	ShipMoving_ = 0;
+
 }
 
 void Ship::EnterShipSequence()
@@ -154,5 +154,19 @@ void Ship::StartShip()
 	Sleep(1000);
 	Button4_->PlayOnce();
 
-	ShipIdle_->PlayLooping();
+	while(ShipPowerUp2_->isPlaying())
+	{
+	}
+	//ShipIdle_->PlayLooping();
+
+}
+
+void Ship::PlayMoving()
+{
+	ShipMoving_->PlayLooping();
+}
+
+void Ship::SetShipMovingSoundPos(const float x, const float y, const float z)
+{
+	ShipMoving_->SetPosition(x - 5.0f, y, z);	// Minus 5 to make sound appear more quite
 }

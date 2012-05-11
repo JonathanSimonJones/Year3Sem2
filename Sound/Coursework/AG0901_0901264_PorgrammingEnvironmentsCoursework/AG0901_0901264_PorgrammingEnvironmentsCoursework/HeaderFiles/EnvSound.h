@@ -16,7 +16,7 @@ class EnvSound {
 private:
 	Sound* theSound;                    // 2D sound buffer to be played.
 	LPDIRECTSOUND3DBUFFER the3dSound;   // 3D interface to the above.
-
+	float x_, z_;
 public:
 	// constructor method.
 	// Positions 3d sound and starts playing it.
@@ -31,6 +31,8 @@ public:
 	void StopPlaying();
 	bool isPlaying();
 	void changePan(int Pan);
+	float getX();
+	float getZ();
 }; // end EnvSound class.
 
 #endif // ENV_SOUND_H_

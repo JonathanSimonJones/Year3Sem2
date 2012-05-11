@@ -21,6 +21,8 @@ public:
 	void EnterShipSequence();
 	void StartShip();
 	void MoveDeltaX();
+	void PlayMoving();
+	void SetShipMovingSoundPos(const float x, const float y, const float z);
 
 private:
 
@@ -33,12 +35,12 @@ private:
 	EnvSound *ShipDoorOpening_;
 	EnvSound *ShipDoorClosing_;
 	EnvSound *ShipIdle_;
-	EnvSound *ShipMoving_;
 	EnvSound *ShipPoweringDown_;
 	EnvSound *ShipPowerUp_;
 	EnvSound *ShipPowerUp2_;
 	EnvSound *Wub1_;
 	EnvSound *SeatMovement_;
+	EnvSound *ShipMoving_;
 	
 };
 #endif	// SHIP_H_

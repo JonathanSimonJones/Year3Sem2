@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderFiles\Beacon.h" />
     <ClInclude Include="HeaderFiles\Console.hpp" />
     <ClInclude Include="HeaderFiles\Crowd.h" />
     <ClInclude Include="HeaderFiles\dsoundUtility.h" />
@@ -18,6 +19,7 @@
     <ClInclude Include="HeaderFiles\Ship.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SourceFiles\Beacon.cpp" />
     <ClCompile Include="SourceFiles\Console.cpp" />
     <ClCompile Include="SourceFiles\Crowd.cpp" />
     <ClCompile Include="SourceFiles\dsoundUtility.cpp" />

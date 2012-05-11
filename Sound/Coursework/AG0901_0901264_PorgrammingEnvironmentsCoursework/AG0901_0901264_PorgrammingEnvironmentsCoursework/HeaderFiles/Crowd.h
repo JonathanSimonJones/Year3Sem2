@@ -20,6 +20,7 @@ public:
 	void CreateNewSound(char* NameOfFile);
 	void SetPosition(const float x, const float y, const float z);
 	void Play();
+	void Stop();
 private:
 	DSoundDevice* DirectSoundDevice_;
 	std::list<EnvSound*> CrowdList_;
