@@ -50,6 +50,7 @@ namespace MyD3D10Code
 		void CreateDepthStencilStates();
 		void TurnZBufferOff();
 		void TurnZBufferOn();
+		void ResetViewport();
 	protected:
 		HWND m_DirectX10ClassWindowHandle;	// Handle to the window 
 

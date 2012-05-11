@@ -12,6 +12,7 @@
 
 class OrthoWindowClass;
 class TextureShaderClass;
+class HorizontalBlurShaderClass;
 
 class Scene : public MyD3D10Code::Direct3D10Class
 {
@@ -25,6 +26,7 @@ private:
 	void RenderUsingPostProcessing();
 	void RenderToTexture();
 	void RenderToBackBuffer();
+	void RenderHorizontalBlurToTexture();
 private:
 	D3DXMATRIX m_WorldViewProjection;
 
@@ -69,6 +71,10 @@ private:
 	OrthoWindowClass *m_FullScreenWindow;
 
 	TextureShaderClass* m_TextureShader;
+
+	HorizontalBlurShaderClass *m_HorizontalBlurShader;
+
+	RenderTextureClass *m_HorizontalBlurTexture;
 };
 
 #endif 

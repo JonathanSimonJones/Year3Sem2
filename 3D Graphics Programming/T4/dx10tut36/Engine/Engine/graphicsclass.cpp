@@ -530,7 +530,7 @@ void GraphicsClass::RenderHorizontalBlurToTexture()
 	m_D3D->TurnZBufferOff();
 
 	// Put the small ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_SmallWindow->Render(m_D3D->GetDevice());
+	m_FullScreenWindow->Render(m_D3D->GetDevice());
 	
 	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
 	m_HorizontalBlurShader->Render(m_D3D->GetDevice(), m_FullScreenWindow->GetIndexCount(), worldMatrix, viewMatrix, orthoMatrix, 

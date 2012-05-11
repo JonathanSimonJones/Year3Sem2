@@ -4,6 +4,7 @@
 #include "..\\HeaderFiles\\TextureMgr.h"
 #include "..\\HeaderFiles\\orthowindowclass.h"
 #include "..\\HeaderFiles\\textureshaderclass.h"
+#include "..\\HeaderFiles\\horizontalblurshaderclass.h"
 
 Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight)
 : MyD3D10Code::Direct3D10Class(TheWindow, WindowWidth, WindowHeight)
@@ -77,7 +78,6 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 	m_Sky.init(m_Direct3DDevice, m_EnvironmentMapRV, 5000.0f);
 
 	m_Terrain.Initialise(m_Direct3DDevice, 30);
-	m_Terrain.Generate(m_Direct3DDevice);
 
 	// Initialise render texture
 	m_RenderTexture.Initialize(m_Direct3DDevice, WindowWidth, WindowHeight);
@@ -93,6 +93,28 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 
 	// Initialize the texture shader object.
 	m_TextureShader->Initialize(m_Direct3DDevice, TheWindow);
+
+	// Create the horizontal blur shader object.
+	m_HorizontalBlurShader = new HorizontalBlurShaderClass;
+	
+	bool result;
+	// Initialize the horizontal blur shader object.
+	result = m_HorizontalBlurShader->Initialize(m_Direct3DDevice, TheWindow);
+	if(!result)
+	{
+		MessageBox(TheWindow, L"Could not initialize the horizontal blur shader object.", L"Error", MB_OK);
+	}
+
+	// Create the horizontal blur render to texture object.
+	m_HorizontalBlurTexture = new RenderTextureClass;
+
+	// Initialize the horizontal blur render to texture object.
+	result = m_HorizontalBlurTexture->Initialize(m_Direct3DDevice, WindowWidth, WindowHeight);
+	if(!result)
+	{
+		MessageBox(TheWindow, L"Could not initialize the horizontal blur render to texture object.", L"Error", MB_OK);
+	}
+
 }
 
 Scene::~Scene()
@@ -111,6 +133,22 @@ Scene::~Scene()
 	ReleaseCOM(m_SpecMapRV);
 	fx::DestroyAll();
 	InputLayout::DestroyAll();
+
+	// Release the horizontal blur shader object.
+	if(m_HorizontalBlurShader)
+	{
+		m_HorizontalBlurShader->Shutdown();
+		delete m_HorizontalBlurShader;
+		m_HorizontalBlurShader = 0;
+	}
+
+	// Release the horizontal blur render to texture object.
+	if(m_HorizontalBlurTexture)
+	{
+		m_HorizontalBlurTexture->Shutdown();
+		delete m_HorizontalBlurTexture;
+		m_HorizontalBlurTexture = 0;
+	}
 }
 
 void Scene::BuildFX()
@@ -195,61 +233,13 @@ void Scene::UpdateScene(float dt)
 
 	// Update the box 
 	m_Box.Update(dt);
+
+	//m_Terrain.Generate();
 }
 
 void Scene::DrawScene()
 {
 	MyD3D10Code::Direct3D10Class::DrawScene();
-
-	/*
-	// Restore Default states, input layout and primitive topology 
-	// as m_Font->DrawText changes them. Note that we can restore
-	// the default states by passing null
-	m_Direct3DDevice->OMSetDepthStencilState(0, 0);
-	float blendFactors[] = {0.0f, 0.0f, 0.0f, 0.0f};
-	m_Direct3DDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
-	m_Direct3DDevice->IASetInputLayout(m_VertexLayout);									// Bind input layout to the device
-	m_Direct3DDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);	// Set primitive topology to triangle list
-
-	D3DXMATRIX view = GetCamera().view();
-	D3DXMATRIX proj = GetCamera().proj();
-
-	/////////////////////////
-	// Set constants 
-	/////////////////////////
-	m_fxDiffuseMapVar->SetResource(m_DiffuseMapRV);
-
-	m_FxSpecMapVar->SetResource(m_SpecMapRV);
-	m_FxEyePosVar->SetRawValue(&GetCamera().position(), 0, sizeof(D3DXVECTOR3) );
-	m_FxLightVar->SetRawValue(&m_ParallelLight, 0, sizeof(Light) );
-	
-	D3DXMATRIX texMat;
-	D3DXMatrixIdentity(&texMat);
-	m_FxTexMatVar->SetMatrix((float*)&texMat);
-	
-	///////////////////////////
-	// End constants 
-	///////////////////////////
-
-	D3D10_TECHNIQUE_DESC techDescription;
-	m_Tech->GetDesc( &techDescription );
-
-	for( UINT p = 0; p < techDescription.Passes; ++p)
-	{
-		//m_Tech->GetPassByIndex( p )->Apply(0);
-		ID3D10EffectPass* pass = m_Tech->GetPassByIndex(p);
-		
-		m_fxDiffuseMapVar->SetResource(m_DiffuseMapRV);
-		m_WorldViewProjection = m_Box.ReturnWorldMatrix()*view*proj;
-		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );		// Updates WVP matrix in the internal cache of the effect object
-		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );
-		pass->Apply(0);
-		m_Box.Draw(m_Direct3DDevice);
-
-		//m_Terrain.Draw(m_Direct3DDevice);
-	}
-	*/
-	//m_Sky.draw();	// Draw the sky
 
 	// Render the post process scene
 	RenderUsingPostProcessing();
@@ -266,6 +256,8 @@ void Scene::DrawScene()
 void Scene::RenderUsingPostProcessing()
 {
 	Scene::RenderToTexture();
+
+	Scene::RenderHorizontalBlurToTexture();
 
 	Scene::RenderToBackBuffer();
 }
@@ -325,7 +317,7 @@ void Scene::RenderToTexture()
 
 		m_Terrain.Draw(m_Direct3DDevice);
 	}
-	m_Sky.draw();	// Draw the sky
+	//m_Sky.draw();	// Draw the sky
 }
 
 void Scene::RenderToBackBuffer()
@@ -348,7 +340,41 @@ void Scene::RenderToBackBuffer()
 							worldMatrix, 
 							GetCamera().view(), 
 							GetCamera().proj(), 
-							m_RenderTexture.GetShaderResourceView());
+							m_HorizontalBlurTexture->GetShaderResourceView());
 
+	// Turn the z buffer back on
+	Direct3D10Class::TurnZBufferOn();
+}
+
+void Scene::RenderHorizontalBlurToTexture()
+{
+	D3DXMATRIX worldMatrix;
+
+	float screenSizeX;
+
+	// Store the screen width in a float that will be used in the horizontal blur shader.
+	screenSizeX = (float)m_HorizontalBlurTexture->GetTextureWidth();
+
+	// Set the render target to be the render to texture.
+	m_HorizontalBlurTexture->SetRenderTarget(m_Direct3DDevice);
+
+	// Clear the render to texture.
+	m_HorizontalBlurTexture->ClearRenderTarget(m_Direct3DDevice, 0.0f, 0.0f, 0.0f, 1.0f);
+
+	Direct3D10Class::TurnZBufferOff();
+
+	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_FullScreenWindow->Render(m_Direct3DDevice);
+
+	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
+	m_HorizontalBlurShader->Render(m_Direct3DDevice, 
+									m_FullScreenWindow->GetIndexCount(), 							
+									worldMatrix, 
+									GetCamera().view(), 
+									GetCamera().proj(), 
+									m_RenderTexture.GetShaderResourceView(), 
+									screenSizeX);
+
+	// Turn the z buffer back on
 	Direct3D10Class::TurnZBufferOn();
 }

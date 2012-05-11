@@ -85,6 +85,7 @@
     <ClInclude Include="HeaderFiles\Effects.h" />
     <ClInclude Include="HeaderFiles\Floor.h" />
     <ClInclude Include="HeaderFiles\GameTimer.h" />
+    <ClInclude Include="HeaderFiles\horizontalblurshaderclass.h" />
     <ClInclude Include="HeaderFiles\InputLayouts.h" />
     <ClInclude Include="HeaderFiles\Light.h" />
     <ClInclude Include="HeaderFiles\Line.hpp" />
@@ -110,6 +111,7 @@
     <ClCompile Include="SourceFiles\Effects.cpp" />
     <ClCompile Include="SourceFiles\Floor.cpp" />
     <ClCompile Include="SourceFiles\GameTimer.cpp" />
+    <ClCompile Include="SourceFiles\horizontalblurshaderclass.cpp" />
     <ClCompile Include="SourceFiles\InputLayouts.cpp" />
     <ClCompile Include="SourceFiles\Line.cpp" />
     <ClCompile Include="SourceFiles\main.cpp" />
@@ -128,6 +130,7 @@
   <ItemGroup>
     <None Include="EffectFiles\color.fx" />
     <None Include="EffectFiles\cubemap.fx" />
+    <None Include="EffectFiles\horizontalblur.fx" />
     <None Include="EffectFiles\lighthelper.fx" />
     <None Include="EffectFiles\sky.fx" />
     <None Include="EffectFiles\tex.fx" />

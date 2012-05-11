@@ -452,4 +452,9 @@ namespace MyD3D10Code
 	{
 		m_Direct3DDevice->OMSetDepthStencilState(m_DepthStencilState, 1);
 	}
+
+	void Direct3D10Class::ResetViewport()
+	{
+		//m_Direct3DDevice->RSSetViewports(1, &m_viewport);
+	}
 }

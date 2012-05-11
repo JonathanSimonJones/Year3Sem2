@@ -9,6 +9,7 @@ Terrain::Terrain()
 : mNumVertices(3)
 , mNumFaces(1)
 , scale(1)
+, sizeOfGrid(0)
 {
 }
 	
@@ -16,22 +17,25 @@ Terrain::~Terrain()
 {
 }
 
-void Terrain::Initialise(ID3D10Device* Direct3DDevice, int n)
+void Terrain::Initialise(ID3D10Device* Direct3DDevice, int gridSize)
 {
+	// Set size of grid
+	sizeOfGrid = gridSize;
+
 	// Make sure n is not less than one as that value cannot be calculated using the current formula's
-	if(n < 1)
+	if(sizeOfGrid < 1)
 	{
-		n = 1;
+		sizeOfGrid = 1;
 	}
 	
 	// Calculate variables 
-	int NumberOfBlocks = (n * n);
-	mNumVertices = (n+1) * (n+1);
+	int NumberOfBlocks = (sizeOfGrid * sizeOfGrid);
+	mNumVertices = (sizeOfGrid+1) * (sizeOfGrid+1);
 	mNumFaces = (NumberOfBlocks * 2);
 	int mNumIndices = (6 * NumberOfBlocks);
 
 	// Create vertices
-	CreateTerrainVertices( n );
+	CreateTerrainVertices();
 
     D3D10_BUFFER_DESC vbd;
     vbd.Usage = D3D10_USAGE_DYNAMIC;
@@ -46,7 +50,7 @@ void Terrain::Initialise(ID3D10Device* Direct3DDevice, int n)
 
 	// Create indices 
 	std::vector<DWORD> indices;
-	CreateIndices( &indices, n);
+	CreateIndices( &indices);
 	
 	D3D10_BUFFER_DESC ibd;
 	ibd.Usage = D3D10_USAGE_IMMUTABLE;
@@ -61,7 +65,7 @@ void Terrain::Initialise(ID3D10Device* Direct3DDevice, int n)
 	HR(Direct3DDevice->CreateBuffer(&ibd, &IndexInitData, &mIB));
 }
 
-void Terrain::Generate(ID3D10Device* Direct3DDevice)
+void Terrain::Generate()
 {
 	/*
 	srand ( time(NULL) );
@@ -113,32 +117,41 @@ void Terrain::Generate(ID3D10Device* Direct3DDevice)
 	}
 	*/
 
-	Vertex *vert;
+	// Seed rand
+	srand ( time(NULL) );
+
+	// Set a scale ratio for vert postition
+	const float genScale = 1.0f * scale;
+
+	// Generate 2 rand positions on the grid
+	const float x1 = static_cast<float>(rand() % sizeOfGrid);
+	const float y1 = static_cast<float>(rand() % sizeOfGrid);
+	const float x2 = static_cast<float>(rand() % sizeOfGrid);
+	const float y2 = static_cast<float>(rand() % sizeOfGrid);
+
+	// If they are the same then exit
+	if(x1 == x2 && y1 == y2)
+	{
+		return;
+	}
+
+	// 
+	Vertex *vert(0);
 
 	HRESULT result;
-	result = mVB->Map(D3D10_MAP_READ_WRITE, 0, (void**)&vert);
+	result = mVB->Map(D3D10_MAP_WRITE_NO_OVERWRITE, 0, (void**)&vert);
 
 	float j = 0.0f;
 
 	for( int i = 0; i < vertices.size(); i++)
 	{ 
-		vertices[i].pos.y += j;
-		j++;
+		const float z = (x1 - x2) * (y1 - vertices[i].pos.z) - (x1 - vertices[i].pos.x) * (y1 - y2);
+
+		vertices[i].pos.y += (z < 0 ? .1 : -.1) * genScale;
+		vert[i].pos.y = vertices[i].pos.y;
 	}
 
 	mVB->Unmap();
-	/*
-	D3D10_BUFFER_DESC vbd;
-    vbd.Usage = D3D10_USAGE_IMMUTABLE;
-    vbd.ByteWidth = sizeof(vertices[0]) * mNumVertices;
-    vbd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
-    vbd.CPUAccessFlags = 0;
-    vbd.MiscFlags = 0;
-    
-	D3D10_SUBRESOURCE_DATA vinitData;
-    vinitData.pSysMem = &vertices[0];
-    HR(Direct3DDevice->CreateBuffer(&vbd, &vinitData, &mVB));
-	*/
 }
 
 void Terrain::Draw(ID3D10Device* Direct3DDevice)
@@ -150,53 +163,53 @@ void Terrain::Draw(ID3D10Device* Direct3DDevice)
 	Direct3DDevice->DrawIndexed(mNumFaces*3, 0, 0);
 }
 
-void Terrain::CreateTerrainVertices( int n_ )
+void Terrain::CreateTerrainVertices()
 {
 	// Create vertex list 
-	for( float z = 0; z < (n_+1); ++z)
+	for( float z = 0; z < (sizeOfGrid+1); ++z)
 	{
-		for( float x = 0; x < (n_+1); ++x)
+		for( float x = 0; x < (sizeOfGrid+1); ++x)
 		{
 			vertices.push_back( Vertex(x, 0.0f, z, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f));
 		}
 	}
 }
 
-void Terrain::CreateIndices( std::vector<DWORD>* indices_, int n_)
+void Terrain::CreateIndices( std::vector<DWORD>* indices_)
 {
 	int NumOfRowsComplete = 0;
 	
-	for( int RowNum = 0; RowNum < (n_); ++RowNum)
+	for( int RowNum = 0; RowNum < (sizeOfGrid); ++RowNum)
 	{
-		for( int ColNum = 0; ColNum < (n_); ++ColNum)
+		for( int ColNum = 0; ColNum < (sizeOfGrid); ++ColNum)
 		{
 			if( !( (RowNum + ColNum) % 2) )
 			{
-				indices_->push_back( ( RowNum * n_ ) + ColNum + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum + 1 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + 1 + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum + n_ + 1 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + sizeOfGrid + 1 + NumOfRowsComplete);
 
-				indices_->push_back( ( RowNum * n_ ) + ColNum + n_ + 2 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + sizeOfGrid + 2 + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum + n_ + 1 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + sizeOfGrid + 1 + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum  + 1 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum  + 1 + NumOfRowsComplete);
 			}
 			else
 			{
-				indices_->push_back( ( RowNum * n_ ) + ColNum + n_ + 2 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + sizeOfGrid + 2 + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum + n_ + 1 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + sizeOfGrid + 1 + NumOfRowsComplete);
 
-				indices_->push_back( ( RowNum * n_ ) + ColNum + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + NumOfRowsComplete);
 
-				indices_->push_back( ( RowNum * n_ ) + ColNum + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum + 1 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + 1 + NumOfRowsComplete);
 			
-				indices_->push_back( ( RowNum * n_ ) + ColNum + n_ + 2 + NumOfRowsComplete);
+				indices_->push_back( ( RowNum * sizeOfGrid ) + ColNum + sizeOfGrid + 2 + NumOfRowsComplete);
 			}
 		}
 		NumOfRowsComplete++;
