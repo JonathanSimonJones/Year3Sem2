@@ -178,10 +178,10 @@
     <None Include="EffectFiles\tex.fx">
       <Filter>EffectFiles</Filter>
     </None>
-    <None Include="EffectFiles\texture.fx">
+    <None Include="EffectFiles\horizontalblur.fx">
       <Filter>EffectFiles</Filter>
     </None>
-    <None Include="EffectFiles\horizontalblur.fx">
+    <None Include="EffectFiles\renderToTexture.fx">
       <Filter>EffectFiles</Filter>
     </None>
   </ItemGroup>

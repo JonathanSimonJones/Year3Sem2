@@ -134,7 +134,7 @@
     <None Include="EffectFiles\lighthelper.fx" />
     <None Include="EffectFiles\sky.fx" />
     <None Include="EffectFiles\tex.fx" />
-    <None Include="EffectFiles\texture.fx" />
+    <None Include="EffectFiles\renderToTexture.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

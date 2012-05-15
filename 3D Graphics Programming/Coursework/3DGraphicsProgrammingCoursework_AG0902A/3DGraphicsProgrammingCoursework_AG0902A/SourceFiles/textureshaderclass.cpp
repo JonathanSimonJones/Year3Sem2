@@ -10,9 +10,6 @@ TextureShaderClass::TextureShaderClass()
 	m_technique = 0;
 	m_layout = 0;
 
-	m_worldMatrixPtr = 0;
-	m_viewMatrixPtr = 0;
-	m_projectionMatrixPtr = 0;
 	m_texturePtr = 0;
 }
 
@@ -33,7 +30,7 @@ bool TextureShaderClass::Initialize(ID3D10Device* device, HWND hwnd)
 
 
 	// Initialize the shader that will be used to draw the model.
-	result = InitializeShader(device, hwnd, L".\\EffectFiles\\texture.fx");
+	result = InitializeShader(device, hwnd, L".\\EffectFiles\\renderToTexture.fx");
 	if(!result)
 	{
 		return false;
@@ -52,11 +49,10 @@ void TextureShaderClass::Shutdown()
 }
 
 
-void TextureShaderClass::Render(ID3D10Device* device, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, 
-								D3DXMATRIX projectionMatrix, ID3D10ShaderResourceView* texture)
+void TextureShaderClass::Render(ID3D10Device* device, int indexCount, ID3D10ShaderResourceView* texture)
 {
 	// Set the shader parameters that it will use for rendering.
-	SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture);
+	SetShaderParameters(texture);
 
 	// Now render the prepared buffers with the shader.
 	RenderShader(device, indexCount);
@@ -135,11 +131,6 @@ bool TextureShaderClass::InitializeShader(ID3D10Device* device, HWND hwnd, WCHAR
 		return false;
 	}
 
-	// Get pointers to the three matrices inside the shader so we can update them from this class.
-    m_worldMatrixPtr = m_effect->GetVariableByName("worldMatrix")->AsMatrix();
-	m_viewMatrixPtr = m_effect->GetVariableByName("viewMatrix")->AsMatrix();
-    m_projectionMatrixPtr = m_effect->GetVariableByName("projectionMatrix")->AsMatrix();
-
 	// Get pointer to the texture resource inside the shader.
 	m_texturePtr = m_effect->GetVariableByName("shaderTexture")->AsShaderResource();
 
@@ -151,11 +142,6 @@ void TextureShaderClass::ShutdownShader()
 {
 	// Release the pointer to the texture in the shader file.
 	m_texturePtr = 0;
-
-	// Release the pointers to the matrices inside the shader.
-	m_worldMatrixPtr = 0;
-	m_viewMatrixPtr = 0;
-	m_projectionMatrixPtr = 0;
 
 	// Release the pointer to the shader layout.
 	if(m_layout)
@@ -214,18 +200,8 @@ void TextureShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND
 }
 
 
-void TextureShaderClass::SetShaderParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,
-											 ID3D10ShaderResourceView* texture)
+void TextureShaderClass::SetShaderParameters(ID3D10ShaderResourceView* texture)
 {
-	// Set the world matrix variable inside the shader.
-    m_worldMatrixPtr->SetMatrix((float*)&worldMatrix);
-
-	// Set the view matrix variable inside the shader.
-	m_viewMatrixPtr->SetMatrix((float*)&viewMatrix);
-
-	// Set the projection matrix variable inside the shader.
-    m_projectionMatrixPtr->SetMatrix((float*)&projectionMatrix);
-
 	// Bind the texture.
 	m_texturePtr->SetResource(texture);
 

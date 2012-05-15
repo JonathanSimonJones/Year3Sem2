@@ -29,9 +29,6 @@ public:
 	void ClearRenderTarget(ID3D10Device*, float, float, float, float);
 	ID3D10ShaderResourceView* GetShaderResourceView();
 
-	void GetProjectionMatrix(D3DXMATRIX&);
-	void GetOrthoMatrix(D3DXMATRIX&);
-
 	int GetTextureWidth();
 	int GetTextureHeight();
 

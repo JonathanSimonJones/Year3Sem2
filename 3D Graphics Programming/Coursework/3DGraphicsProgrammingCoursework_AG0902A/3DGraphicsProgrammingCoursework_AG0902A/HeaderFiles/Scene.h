@@ -25,8 +25,8 @@ public:
 private:
 	void RenderUsingPostProcessing();
 	void RenderToTexture();
-	void RenderToBackBuffer();
 	void RenderHorizontalBlurToTexture();
+	void RenderToBackBuffer();
 private:
 	D3DXMATRIX m_WorldViewProjection;
 
@@ -75,6 +75,8 @@ private:
 	HorizontalBlurShaderClass *m_HorizontalBlurShader;
 
 	RenderTextureClass *m_HorizontalBlurTexture;
+
+	bool m_BlurActive;
 };
 
 #endif 

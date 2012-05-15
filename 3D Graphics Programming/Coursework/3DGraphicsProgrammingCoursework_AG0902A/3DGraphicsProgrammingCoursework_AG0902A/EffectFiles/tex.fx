@@ -27,7 +27,7 @@ SamplerState gSampler
 RasterizerState WireFrame
 {
 	FillMode = Wireframe;
-	CullMode = back;
+	CullMode = None;
 	FrontCounterClockwise = true;
 };
 
@@ -98,6 +98,6 @@ technique10 ColorTech
 		SetGeometryShader( NULL );
 		SetPixelShader( CompileShader( ps_4_0, PS() ) );
 
-		//SetRasterizerState(WireFrame);
+		SetRasterizerState(WireFrame);
 	}
 }

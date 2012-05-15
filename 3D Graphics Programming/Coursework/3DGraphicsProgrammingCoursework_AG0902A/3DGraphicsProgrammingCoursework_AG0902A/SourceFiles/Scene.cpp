@@ -26,12 +26,13 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 , m_RenderTexture()
 , m_FullScreenWindow(0)
 , m_TextureShader(0)
+, m_BlurActive(true)
 {
 	// Initialise world view projection matrix
 	D3DXMatrixIdentity(&m_WorldViewProjection);
 
 	// Set the position of the camera
-	GetCamera().position() = D3DXVECTOR3(0.0f, 1.8f, -10.0f);
+	GetCamera().position() = D3DXVECTOR3(0.0f, 10.0f, -40.0f);
 
 	// Set the camera up
 	float aspect = (float)m_WindowWidth/m_WindowHeight;		// Used in D3DXMatrixPerspectiveFovLH()
@@ -77,7 +78,7 @@ Scene::Scene(HWND TheWindow, unsigned int WindowWidth, unsigned int WindowHeight
 	// Initialise sky
 	m_Sky.init(m_Direct3DDevice, m_EnvironmentMapRV, 5000.0f);
 
-	m_Terrain.Initialise(m_Direct3DDevice, 30);
+	m_Terrain.Initialise(m_Direct3DDevice, 45);
 
 	// Initialise render texture
 	m_RenderTexture.Initialize(m_Direct3DDevice, WindowWidth, WindowHeight);
@@ -234,7 +235,17 @@ void Scene::UpdateScene(float dt)
 	// Update the box 
 	m_Box.Update(dt);
 
-	//m_Terrain.Generate();
+	if(GetAsyncKeyState('B') & 0x8000)	
+	{
+		m_BlurActive = true;
+	}
+
+	if(GetAsyncKeyState('N') & 0x8000)	
+	{
+		m_BlurActive = false;
+	}
+
+	m_Terrain.Generate();
 }
 
 void Scene::DrawScene()
@@ -257,7 +268,10 @@ void Scene::RenderUsingPostProcessing()
 {
 	Scene::RenderToTexture();
 
-	Scene::RenderHorizontalBlurToTexture();
+	if(m_BlurActive)
+	{
+		Scene::RenderHorizontalBlurToTexture();
+	}
 
 	Scene::RenderToBackBuffer();
 }
@@ -313,43 +327,15 @@ void Scene::RenderToTexture()
 		m_fxWVPVar->SetMatrix( (float*)&m_WorldViewProjection );		// Updates WVP matrix in the internal cache of the effect object
 		m_FxBoxWorldVar->SetMatrix((float*)&m_Box.ReturnWorldMatrix() );
 		pass->Apply(0);
-		m_Box.Draw(m_Direct3DDevice);
+		//m_Box.Draw(m_Direct3DDevice);
 
 		m_Terrain.Draw(m_Direct3DDevice);
 	}
-	//m_Sky.draw();	// Draw the sky
-}
-
-void Scene::RenderToBackBuffer()
-{
-	D3DXMATRIX worldMatrix;
-
-	// Initialize the world matrix to the identity matrix.
-    D3DXMatrixIdentity(&worldMatrix);
-	
-	Direct3D10Class::ResetDefaultRenderTargets();
-
-	Direct3D10Class::TurnZBufferOff();
-
-	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	m_FullScreenWindow->Render(m_Direct3DDevice);
-
-	// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
-	m_TextureShader->Render(m_Direct3DDevice, 
-							m_FullScreenWindow->GetIndexCount(), 
-							worldMatrix, 
-							GetCamera().view(), 
-							GetCamera().proj(), 
-							m_HorizontalBlurTexture->GetShaderResourceView());
-
-	// Turn the z buffer back on
-	Direct3D10Class::TurnZBufferOn();
+	m_Sky.draw();	// Draw the sky
 }
 
 void Scene::RenderHorizontalBlurToTexture()
 {
-	D3DXMATRIX worldMatrix;
-
 	float screenSizeX;
 
 	// Store the screen width in a float that will be used in the horizontal blur shader.
@@ -369,11 +355,41 @@ void Scene::RenderHorizontalBlurToTexture()
 	// Render the small ortho window using the horizontal blur shader and the down sampled render to texture resource.
 	m_HorizontalBlurShader->Render(m_Direct3DDevice, 
 									m_FullScreenWindow->GetIndexCount(), 							
-									worldMatrix, 
-									GetCamera().view(), 
-									GetCamera().proj(), 
 									m_RenderTexture.GetShaderResourceView(), 
 									screenSizeX);
+
+	// Turn the z buffer back on
+	Direct3D10Class::TurnZBufferOn();
+}
+
+void Scene::RenderToBackBuffer()
+{
+	D3DXMATRIX worldMatrix;
+
+	// Initialize the world matrix to the identity matrix.
+    D3DXMatrixIdentity(&worldMatrix);
+	
+	Direct3D10Class::ResetDefaultRenderTargets();
+
+	Direct3D10Class::TurnZBufferOff();
+
+	// Put the full screen ortho window vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	m_FullScreenWindow->Render(m_Direct3DDevice);
+
+	if(m_BlurActive)
+	{
+		// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
+		m_TextureShader->Render(m_Direct3DDevice, 
+								m_FullScreenWindow->GetIndexCount(), 
+								m_HorizontalBlurTexture->GetShaderResourceView());
+	}
+	else
+	{
+		// Render the full screen ortho window using the texture shader and the full screen sized blurred render to texture resource.
+		m_TextureShader->Render(m_Direct3DDevice, 
+								m_FullScreenWindow->GetIndexCount(),
+								m_RenderTexture.GetShaderResourceView());
+	}
 
 	// Turn the z buffer back on
 	Direct3D10Class::TurnZBufferOn();

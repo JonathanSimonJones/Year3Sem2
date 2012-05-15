@@ -34,6 +34,8 @@ public:
 
 	void Update(float dt);
 
+	void SetLookAt(const float x, const float y, const float z);
+
 private:
 	D3DXVECTOR3 mPosition;
 	D3DXVECTOR3 mRight;

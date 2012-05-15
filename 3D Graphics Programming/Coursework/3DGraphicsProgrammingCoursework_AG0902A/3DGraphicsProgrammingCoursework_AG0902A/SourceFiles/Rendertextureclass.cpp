@@ -209,20 +209,6 @@ ID3D10ShaderResourceView* RenderTextureClass::GetShaderResourceView()
 }
 
 
-void RenderTextureClass::GetProjectionMatrix(D3DXMATRIX& projectionMatrix)
-{
-	projectionMatrix = m_projectionMatrix;
-	return;
-}
-
-
-void RenderTextureClass::GetOrthoMatrix(D3DXMATRIX& orthoMatrix)
-{
-	orthoMatrix = m_orthoMatrix;
-	return;
-}
-
-
 int RenderTextureClass::GetTextureWidth()
 {
 	return m_textureWidth;

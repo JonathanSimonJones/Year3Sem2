@@ -10,9 +10,6 @@ HorizontalBlurShaderClass::HorizontalBlurShaderClass()
 	m_technique = 0;
 	m_layout = 0;
 
-	m_worldMatrixPtr = 0;
-	m_viewMatrixPtr = 0;
-	m_projectionMatrixPtr = 0;
 	m_texturePtr = 0;
 	m_screenWidthPtr = 0;
 }
@@ -53,11 +50,10 @@ void HorizontalBlurShaderClass::Shutdown()
 }
 
 
-void HorizontalBlurShaderClass::Render(ID3D10Device* device, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, 
-									   D3DXMATRIX projectionMatrix, ID3D10ShaderResourceView* texture, float screenWidth)
+void HorizontalBlurShaderClass::Render(ID3D10Device* device, int indexCount, ID3D10ShaderResourceView* texture, float screenWidth)
 {
 	// Set the shader parameters that it will use for rendering.
-	SetShaderParameters(worldMatrix, viewMatrix, projectionMatrix, texture, screenWidth);
+	SetShaderParameters(texture, screenWidth);
 
 	// Now render the prepared buffers with the shader.
 	RenderShader(device, indexCount);
@@ -135,11 +131,6 @@ bool HorizontalBlurShaderClass::InitializeShader(ID3D10Device* device, HWND hwnd
 		return false;
 	}
 
-	// Get pointers to the three matrices inside the shader so we can update them from this class.
-    m_worldMatrixPtr = m_effect->GetVariableByName("worldMatrix")->AsMatrix();
-	m_viewMatrixPtr = m_effect->GetVariableByName("viewMatrix")->AsMatrix();
-    m_projectionMatrixPtr = m_effect->GetVariableByName("projectionMatrix")->AsMatrix();
-
 	// Get pointer to the texture resource inside the shader.
 	m_texturePtr = m_effect->GetVariableByName("shaderTexture")->AsShaderResource();
 
@@ -157,11 +148,6 @@ void HorizontalBlurShaderClass::ShutdownShader()
 
 	// Release the pointer to the texture in the shader file.
 	m_texturePtr = 0;
-
-	// Release the pointers to the matrices inside the shader.
-	m_worldMatrixPtr = 0;
-	m_viewMatrixPtr = 0;
-	m_projectionMatrixPtr = 0;
 
 	// Release the pointer to the shader layout.
 	if(m_layout)
@@ -220,18 +206,8 @@ void HorizontalBlurShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessag
 }
 
 
-void HorizontalBlurShaderClass::SetShaderParameters(D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, 
-													ID3D10ShaderResourceView* texture, float screenWidth)
+void HorizontalBlurShaderClass::SetShaderParameters(ID3D10ShaderResourceView* texture, float screenWidth)
 {
-	// Set the world matrix variable inside the shader.
-    m_worldMatrixPtr->SetMatrix((float*)&worldMatrix);
-
-	// Set the view matrix variable inside the shader.
-	m_viewMatrixPtr->SetMatrix((float*)&viewMatrix);
-
-	// Set the projection matrix variable inside the shader.
-    m_projectionMatrixPtr->SetMatrix((float*)&projectionMatrix);
-
 	// Bind the texture.
 	m_texturePtr->SetResource(texture);
 

@@ -1,5 +1,6 @@
 #include "..\\HeaderFiles\\Camera.h"
 
+
 Camera& GetCamera()
 {
 	static Camera camera;
@@ -120,12 +121,21 @@ void Camera::rebuildView()
 
 void Camera::Update(float dt)
 {
-	if(GetAsyncKeyState('A') & 0x8000)	GetCamera().strafe(-m_SpeedOfMovement*dt);
-	if(GetAsyncKeyState('D') & 0x8000)	GetCamera().strafe(m_SpeedOfMovement*dt);
-	if(GetAsyncKeyState('W') & 0x8000)	GetCamera().walk(m_SpeedOfMovement*dt);
-	if(GetAsyncKeyState('S') & 0x8000)	GetCamera().walk(-m_SpeedOfMovement*dt);
-	if(GetAsyncKeyState('Q') & 0x8000)	GetCamera().Up(m_SpeedOfMovement*dt);
-	if(GetAsyncKeyState('E') & 0x8000)	GetCamera().Down(m_SpeedOfMovement*dt);
+	if(GetAsyncKeyState('A') & 0x8000)	strafe(-m_SpeedOfMovement*dt);
+	if(GetAsyncKeyState('D') & 0x8000)	strafe(m_SpeedOfMovement*dt);
+	if(GetAsyncKeyState('W') & 0x8000)	walk(m_SpeedOfMovement*dt);
+	if(GetAsyncKeyState('S') & 0x8000)	walk(-m_SpeedOfMovement*dt);
+	if(GetAsyncKeyState('Q') & 0x8000)	Up(m_SpeedOfMovement*dt);
+	if(GetAsyncKeyState('E') & 0x8000)	Down(m_SpeedOfMovement*dt);
 
-	GetCamera().rebuildView();
+	rebuildView();
+}
+
+void Camera::SetLookAt(const float x, const float y, const float z)
+{
+	mLook.x = x;
+	mLook.y = y;
+	mLook.z = z;
+
+	rebuildView();
 }
